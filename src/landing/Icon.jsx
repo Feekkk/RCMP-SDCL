@@ -98,6 +98,69 @@ export default function Icon({ name }) {
           <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
         </svg>
       )
+    case 'alert':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3.5 21 19H3L12 3.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M12 10v4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="12" cy="17.3" r="1" fill="currentColor" />
+        </svg>
+      )
+    case 'info':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+          <path d="M12 11v5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="12" cy="8" r="1" fill="currentColor" />
+        </svg>
+      )
+    case 'car':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 16V11l2-5h12l2 5v5" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M4 16h16v2a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-1H7v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M6.5 11h11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="7.5" cy="16.5" r="1.1" fill="currentColor" />
+          <circle cx="16.5" cy="16.5" r="1.1" fill="currentColor" />
+        </svg>
+      )
+    case 'ticket':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.2a1.6 1.6 0 0 0 0 3.6V15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.2a1.6 1.6 0 0 0 0-3.6V9Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M14 7v10" stroke="currentColor" strokeWidth="1.6" strokeDasharray="2.4 2.4" strokeLinecap="round" />
+        </svg>
+      )
+    case 'bed':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 19v-7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M3 17h18M3 19v1.5M21 19v1.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M5 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3M12 10V8.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1V10" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'users':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="9" cy="8.5" r="3" stroke="currentColor" strokeWidth="1.6" />
+          <path d="M3.5 19c1-3 3-4.7 5.5-4.7s4.5 1.7 5.5 4.7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M15.5 6.2a3 3 0 0 1 0 5.9M19 19c-.7-2.2-1.9-3.7-3.5-4.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      )
+    case 'map-pin':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <circle cx="12" cy="9.3" r="2.4" stroke="currentColor" strokeWidth="1.6" />
+        </svg>
+      )
+    case 'wifi':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3.5 9.8a13 13 0 0 1 17 0M6.5 13.2a9 9 0 0 1 11 0M9.7 16.6a4.6 4.6 0 0 1 4.6 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="12" cy="19.2" r="1.1" fill="currentColor" />
+        </svg>
+      )
     default:
       return null
   }

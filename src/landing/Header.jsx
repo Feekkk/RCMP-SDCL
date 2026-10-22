@@ -3,19 +3,18 @@ import { Link, useLocation } from '@tanstack/react-router'
 import logo from '../assets/unikl-official.png'
 
 const NAV_LINKS = [
-  { label: 'Features', to: '/', hash: 'features', id: 'features' },
-  { label: 'Blog', to: '/blog', id: 'blog' },
+  { label: 'Home', to: '/', id: 'home' },
+  { label: 'Welfare & Medical', to: '/sd', id: 'sd' },
+  { label: 'Parking & Coupons', to: '/cl', id: 'cl' },
+  { label: 'Hostel', to: '/srd', id: 'srd' },
 ]
 
 export default function Header() {
   const location = useLocation()
-  const isHome = location.pathname === '/'
-  const isBlog = location.pathname.startsWith('/blog')
 
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [scrollPct, setScrollPct] = useState(0)
-  const [activeSection, setActiveSection] = useState('top')
 
   useEffect(() => {
     const onScroll = () => {
@@ -30,31 +29,8 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [location.pathname])
 
-  useEffect(() => {
-    if (!isHome) return undefined
-
-    const sectionIds = ['top', 'features', 'trust']
-    const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean)
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
-        })
-      },
-      { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
-    )
-
-    sections.forEach((section) => observer.observe(section))
-    return () => observer.disconnect()
-  }, [isHome])
-
-  const isLinkActive = (link) => {
-    if (link.id === 'blog') return isBlog
-    return isHome && activeSection === link.id
-  }
+  const isLinkActive = (link) =>
+    link.id === 'home' ? location.pathname === '/' : location.pathname.startsWith(link.to)
 
   return (
     <header className={`site-header ${scrolled ? 'site-header-scrolled' : ''}`}>
@@ -69,7 +45,6 @@ export default function Header() {
             <Link
               key={link.id}
               to={link.to}
-              hash={link.hash}
               className={isLinkActive(link) ? 'nav-link-active' : ''}
               onClick={() => setMenuOpen(false)}
             >
@@ -79,9 +54,9 @@ export default function Header() {
         </nav>
 
         <div className="header-actions">
-          <a href="#login" className="btn btn-primary">
-            Student Login
-          </a>
+          <Link to="/login" className="btn btn-primary">
+            Login
+          </Link>
           <button
             type="button"
             className="menu-toggle"

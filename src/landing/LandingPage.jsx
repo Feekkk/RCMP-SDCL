@@ -1,40 +1,14 @@
+import { Link } from '@tanstack/react-router'
 import Header from './Header.jsx'
 import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
-import trustIllustration from '../assets/trust-illustration.svg'
+import { POSTS, categoryTone } from '../blog/posts.js'
 import './LandingPage.css'
 
-const FEATURES = [
-  {
-    icon: 'form',
-    tag: '01',
-    title: 'Digital Forms',
-    description:
-      'Fill up and submit official student forms online — no more printing, queueing, or chasing signatures across departments.',
-    bullets: ['Pre-filled with your student profile', 'Submit and sign digitally', 'Full submission history'],
-    visual: 'form',
-  },
-  {
-    icon: 'fund',
-    tag: '02',
-    title: 'Fund Request',
-    description:
-      'Check your eligibility and apply for financial assistance in a few clicks, with real-time status tracking from submission to approval.',
-    bullets: ['Instant eligibility check', 'Upload supporting documents', 'Track approval in real time'],
-    visual: 'fund',
-  },
-  {
-    icon: 'blog',
-    tag: '03',
-    title: 'Campus Blog',
-    description:
-      'Stay in the loop with announcements, events, and updates broadcast directly by the Student Development & Campus Lifestyle Department.',
-    bullets: ['Official SDCL announcements', 'Event highlights & deadlines', 'New post notifications'],
-    visual: 'blog',
-  },
-]
+const LATEST_POSTS = POSTS.slice(0, 3)
+const [FEATURED_POST, ...SIDE_POSTS] = LATEST_POSTS
 
 const STATS = [
   { value: '3,200+', label: 'Active Students' },
@@ -42,104 +16,6 @@ const STATS = [
   { value: '48h', label: 'Avg. Fund Review' },
   { value: '100%', label: 'Digital & Paperless' },
 ]
-
-const TRUST_FEATURES = [
-  {
-    icon: 'lock',
-    title: 'Encrypted by default',
-    description: 'Every form and fund request is encrypted in transit and at rest — bank-grade security on every submission.',
-  },
-  {
-    icon: 'shield',
-    title: 'Role-based access only',
-    description: 'Only the verified SDCL staff handling your case can view your records. No one else sees them.',
-  },
-  {
-    icon: 'user',
-    title: 'You stay in control',
-    description: 'Review, update, or request removal of your personal data anytime from your dashboard.',
-  },
-  {
-    icon: 'eye-off',
-    title: 'Never sold, never shared',
-    description: 'Your information stays within UniKL RCMP — it is never shared or sold to third parties.',
-  },
-]
-
-function FeatureVisual({ type }) {
-  if (type === 'form') {
-    return (
-      <div className="fvisual fvisual-form">
-        <div className="fvisual-topbar">
-          <span className="fvisual-dot" />
-          <span className="fvisual-dot" />
-          <span className="fvisual-dot" />
-        </div>
-        <div className="fvisual-body">
-          <div className="fv-field">
-            <span className="fv-label">Full Name</span>
-            <span className="fv-value">Nur Aisyah binti Rahman</span>
-          </div>
-          <div className="fv-field">
-            <span className="fv-label">Form Type</span>
-            <span className="fv-value">Leave of Absence</span>
-          </div>
-          <div className="fv-row">
-            <span className="fv-check">✓</span>
-            <span>Supporting document attached</span>
-          </div>
-          <button type="button" className="fv-submit">
-            Submit Form
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  if (type === 'fund') {
-    return (
-      <div className="fvisual fvisual-fund">
-        <div className="fv-ring">
-          <svg viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="50" className="fv-ring-track" />
-            <circle cx="60" cy="60" r="50" className="fv-ring-progress" />
-          </svg>
-          <div className="fv-ring-label">
-            <strong>Eligible</strong>
-            <span>82% match</span>
-          </div>
-        </div>
-        <div className="fv-fund-details">
-          <div className="fv-fund-row">
-            <span>Requested amount</span>
-            <strong>RM 1,200</strong>
-          </div>
-          <div className="fv-fund-row">
-            <span>Status</span>
-            <span className="fv-badge">Under Review</span>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="fvisual fvisual-blog">
-      <div className="fv-post">
-        <span className="fv-post-tag">Announcement</span>
-        <div className="fv-post-line fv-post-line-title" />
-        <div className="fv-post-line" />
-        <span className="fv-post-date">2 days ago</span>
-      </div>
-      <div className="fv-post fv-post-alt">
-        <span className="fv-post-tag fv-post-tag-alt">Event</span>
-        <div className="fv-post-line fv-post-line-title" />
-        <div className="fv-post-line fv-post-line-short" />
-        <span className="fv-post-date">5 days ago</span>
-      </div>
-    </div>
-  )
-}
 
 export default function LandingPage() {
   return (
@@ -172,11 +48,11 @@ export default function LandingPage() {
             </p>
 
             <div className="hero-actions">
-              <a href="#login" className="btn btn-primary btn-lg">
+              <Link to="/login" className="btn btn-primary btn-lg">
                 Student Login
-              </a>
-              <a href="#features" className="btn btn-ghost btn-lg">
-                Explore Features
+              </Link>
+              <a href="#blog" className="btn btn-ghost btn-lg">
+                Explore the Blog
               </a>
             </div>
 
@@ -276,88 +152,67 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <a href="#features" className="scroll-cue" aria-label="Scroll to features">
+          <a href="#blog" className="scroll-cue" aria-label="Scroll to campus blog">
             <span>Scroll to explore</span>
             <Icon name="arrow-down" />
           </a>
         </section>
 
-        <section id="features" className="features">
-          <div className="container">
-            <Reveal as="div" className="section-heading">
-              <span className="eyebrow">What you can do</span>
-              <h2>Everything handled in one dashboard</h2>
-              <p>From paperwork to funding to campus news, the portal brings every student service together.</p>
+        <section id="blog" className="home-blog">
+          <div className="hero-bg" aria-hidden="true">
+            <div className="hero-blob hero-blob-orange home-blog-blob-orange" />
+            <div className="hero-blob hero-blob-navy home-blog-blob-navy" />
+          </div>
+
+          <div className="container home-blog-head">
+            <Reveal as="div">
+              <span className="home-blog-live">
+                <span className="home-blog-live-dot" />
+                Live from SDCL
+              </span>
+              <h2>Campus Blog</h2>
+              <p>Announcements, events, and deadlines broadcast directly by the Student Development &amp; Campus Lifestyle Department.</p>
             </Reveal>
 
-            <div className="feature-rows">
-              {FEATURES.map((feature, index) => (
-                <Reveal
-                  as="div"
-                  className={`feature-row ${index % 2 === 1 ? 'feature-row-reverse' : ''}`}
-                  key={feature.title}
-                >
-                  <div className="feature-row-copy">
-                    <span className="feature-tag">{feature.tag}</span>
-                    <div className="feature-icon">
-                      <Icon name={feature.icon} />
-                    </div>
-                    <h3>{feature.title}</h3>
-                    <p>{feature.description}</p>
-                    <ul className="feature-bullets">
-                      {feature.bullets.map((bullet) => (
-                        <li key={bullet}>{bullet}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="feature-row-visual">
-                    <FeatureVisual type={feature.visual} />
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="trust" className="trust-section">
-          <div className="container trust-top">
-            <Reveal as="div" className="trust-copy">
-              <span className="eyebrow">Security &amp; Privacy</span>
-              <h2>
-                Your records.
-                <br />
-                <span className="accent">Secured, not shared.</span>
-              </h2>
-              <p>
-                Every form, fund request, and document you submit is protected end-to-end —
-                visible only to the department that needs it, never sold or shared beyond
-                UniKL RCMP.
-              </p>
-              <a href="#login" className="btn btn-primary btn-lg">
-                Student Login
+            <Reveal as="div" delay={80}>
+              <Link to="/blog" className="btn btn-ghost home-blog-head-cta">
+                View all posts
                 <Icon name="arrow-right" />
-              </a>
-            </Reveal>
-
-            <Reveal as="div" className="trust-illustration" delay={120}>
-              <img
-                src={trustIllustration}
-                alt="Illustration of a shield protecting a student ID card"
-                width="400"
-                height="400"
-              />
+              </Link>
             </Reveal>
           </div>
 
-          <div className="container">
-            <div className="trust-grid">
-              {TRUST_FEATURES.map((feature, index) => (
-                <Reveal as="div" className="trust-item" key={feature.title} delay={index * 80}>
-                  <div className="trust-item-icon">
-                    <Icon name={feature.icon} />
+          <div className="container home-blog-layout">
+            <Reveal as={Link} to="/blog" className="home-blog-featured">
+              <div className={`post-card-media home-blog-featured-media ${categoryTone(FEATURED_POST.category)}`}>
+                <Icon name={FEATURED_POST.category === 'Event' ? 'calendar' : 'blog'} />
+              </div>
+              <div className="home-blog-featured-body">
+                <span className={`post-tag ${categoryTone(FEATURED_POST.category)}`}>{FEATURED_POST.category}</span>
+                <h3>{FEATURED_POST.title}</h3>
+                <p>{FEATURED_POST.excerpt}</p>
+                <div className="post-card-footer">
+                  <span className="post-date">{FEATURED_POST.date}</span>
+                  <span className="post-read-more">
+                    Read more
+                    <Icon name="arrow-right" />
+                  </span>
+                </div>
+              </div>
+            </Reveal>
+
+            <div className="home-blog-side">
+              {SIDE_POSTS.map((post, index) => (
+                <Reveal as={Link} to="/blog" className="home-blog-side-item" key={post.title} delay={(index + 1) * 90}>
+                  <div className={`post-card-media home-blog-side-icon ${categoryTone(post.category)}`}>
+                    <Icon name={post.category === 'Event' ? 'calendar' : 'blog'} />
                   </div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
+                  <div className="home-blog-side-body">
+                    <span className={`post-tag ${categoryTone(post.category)}`}>{post.category}</span>
+                    <h4>{post.title}</h4>
+                    <span className="post-date">{post.date}</span>
+                  </div>
+                  <Icon name="arrow-right" />
                 </Reveal>
               ))}
             </div>
