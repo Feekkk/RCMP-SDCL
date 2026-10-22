@@ -167,6 +167,49 @@ export default function Icon({ name }) {
           <circle cx="12" cy="19.2" r="1.1" fill="currentColor" />
         </svg>
       )
+    case 'book':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 6.5c-1.8-1.3-4-2-6.5-2-.6 0-1 .4-1 1v11c0 .6.4 1 1 1 2.2 0 4.2.6 6 2 1.8-1.4 3.8-2 6-2 .6 0 1-.4 1-1v-11c0-.6-.4-1-1-1-2.5 0-4.7.7-6.5 2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M12 6.5V19" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      )
+    case 'laptop':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v9H4V6Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M2.5 18.5h19l-1 2h-17l-1-2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'graduation-cap':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 4 2 8.5 12 13l10-4.5L12 4Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M6 10.8V15c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M20 9v5.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      )
+    case 'clock':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+          <path d="M12 7v5l3.5 2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'leaf':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 19c-1-6 1-11 6-13.5C16 3 19 5 19 5s1.8 4-1 9c-2.8 5-9 6-13 5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M6 18c3-4 6-7 11-11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      )
+    case 'external-link':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 6H6a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M14 4h6v6M20 4l-9 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
     default:
       return null
   }

@@ -1,11 +1,12 @@
 import { Link, useLocation } from '@tanstack/react-router'
-import { LayoutDashboard, LogOut } from 'lucide-react'
+import { LayoutDashboard, LogOut, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import uniklLogo from '@/assets/unikl-official.png'
 
 const LINKS = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/admin/users', label: 'Manage Users', icon: Users },
 ]
 
 export default function NavBar({ user, onLogout }) {
@@ -31,7 +32,7 @@ export default function NavBar({ user, onLogout }) {
               className={cn(
                 'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                 active
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'bg-accent text-accent-foreground'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               )}
             >

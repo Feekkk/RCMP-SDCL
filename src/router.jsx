@@ -12,6 +12,7 @@ import BlogPage from './blog/BlogPage.jsx'
 import LoginPage from './login/LoginPage.jsx'
 import DashboardPage from './dashboard/DashboardPage.jsx'
 import AdminDashboard from './admin/Dashboard.jsx'
+import ManageUser from './admin/ManageUser.jsx'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -94,6 +95,12 @@ const adminRoute = createRoute({
   component: AdminDashboard,
 })
 
+const adminUsersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin/users',
+  component: ManageUser,
+})
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   sdRoute,
@@ -107,6 +114,7 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   dashboardRoute,
   adminRoute,
+  adminUsersRoute,
 ])
 
 export const router = createRouter({

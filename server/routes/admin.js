@@ -61,6 +61,82 @@ adminRouter.post('/staff', async (req, res) => {
   return res.status(201).json({ ok: true })
 })
 
+adminRouter.patch('/staff/:staffId', async (req, res) => {
+  const { staffId } = req.params
+  const { email, name, role, unit, password } = req.body ?? {}
+
+  if (!email || !role) {
+    return res.status(400).json({ error: 'email and role are required' })
+  }
+  if (!STAFF_ROLES.includes(role)) {
+    return res.status(400).json({ error: `role must be one of ${STAFF_ROLES.join(', ')}` })
+  }
+  if (unit && !UNITS.includes(unit)) {
+    return res.status(400).json({ error: `unit must be one of ${UNITS.join(', ')}` })
+  }
+
+  const [existing] = await pool.query('SELECT staff_id FROM staff WHERE staff_id = ?', [staffId])
+  if (existing.length === 0) {
+    return res.status(404).json({ error: 'Staff account not found' })
+  }
+
+  try {
+    if (password) {
+      const passwordHash = await hashPassword(password)
+      await pool.query(
+        'UPDATE staff SET email = ?, name = ?, role = ?, unit = ?, password_hash = ? WHERE staff_id = ?',
+        [email, name ?? null, role, unit ?? null, passwordHash, staffId],
+      )
+    } else {
+      await pool.query(
+        'UPDATE staff SET email = ?, name = ?, role = ?, unit = ? WHERE staff_id = ?',
+        [email, name ?? null, role, unit ?? null, staffId],
+      )
+    }
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ error: 'A staff account with this email already exists' })
+    }
+    throw err
+  }
+
+  await logAudit({
+    actorType: 'staff',
+    actorId: req.user.sub,
+    action: 'STAFF_ACCOUNT_UPDATED',
+    entityType: 'staff',
+    entityId: staffId,
+    details: { role, unit },
+    req,
+  })
+
+  return res.json({ ok: true })
+})
+
+adminRouter.delete('/staff/:staffId', async (req, res) => {
+  const { staffId } = req.params
+
+  if (staffId === req.user.sub) {
+    return res.status(400).json({ error: 'You cannot delete your own account' })
+  }
+
+  const [result] = await pool.query('DELETE FROM staff WHERE staff_id = ?', [staffId])
+  if (result.affectedRows === 0) {
+    return res.status(404).json({ error: 'Staff account not found' })
+  }
+
+  await logAudit({
+    actorType: 'staff',
+    actorId: req.user.sub,
+    action: 'STAFF_ACCOUNT_DELETED',
+    entityType: 'staff',
+    entityId: staffId,
+    req,
+  })
+
+  return res.json({ ok: true })
+})
+
 adminRouter.patch('/staff/:staffId/status', async (req, res) => {
   const { staffId } = req.params
   const { isActive } = req.body ?? {}
