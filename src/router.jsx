@@ -11,6 +11,7 @@ import SRDPage from './landing/SRDPage.jsx'
 import BlogPage from './blog/BlogPage.jsx'
 import LoginPage from './login/LoginPage.jsx'
 import DashboardPage from './dashboard/DashboardPage.jsx'
+import AdminDashboard from './admin/Dashboard.jsx'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -87,6 +88,12 @@ const dashboardRoute = createRoute({
   component: DashboardPage,
 })
 
+const adminRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin',
+  component: AdminDashboard,
+})
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   sdRoute,
@@ -99,6 +106,7 @@ const routeTree = rootRoute.addChildren([
   blogRoute,
   loginRoute,
   dashboardRoute,
+  adminRoute,
 ])
 
 export const router = createRouter({

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
-// Placeholder landing point after login. Role-specific dashboards (CLAUDE.md
-// build order step 5) replace this once each unit's module exists.
+// Placeholder landing point after login for non-admin roles. Role-specific
+// dashboards (CLAUDE.md build order step 5) replace this once each unit's
+// module exists.
 export default function DashboardPage() {
   const navigate = useNavigate()
   const [user, setUser] = useState(null)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     fetch('/api/auth/me', { credentials: 'include' })

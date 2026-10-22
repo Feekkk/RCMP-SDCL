@@ -38,7 +38,13 @@ authRouter.post('/login', async (req, res) => {
         return res.status(401).json({ error: 'Invalid ID or password' })
       }
 
-      const token = signSession({ sub: student.student_id, type: 'student', role: 'STUDENT' })
+      const token = signSession({
+        sub: student.student_id,
+        type: 'student',
+        role: 'STUDENT',
+        name: student.name,
+        email: student.email,
+      })
       res.cookie(config.jwt.cookieName, token, COOKIE_OPTIONS)
       await pool.query('UPDATE students SET last_login_at = NOW() WHERE student_id = ?', [student.student_id])
       await logAudit({ actorType: 'student', actorId: student.student_id, action: 'LOGIN_SUCCESS', req })
@@ -72,6 +78,8 @@ authRouter.post('/login', async (req, res) => {
       type: 'staff',
       role: staff.role,
       unit: staff.unit,
+      name: staff.name,
+      email: staff.email,
     })
     res.cookie(config.jwt.cookieName, token, COOKIE_OPTIONS)
     await pool.query('UPDATE staff SET last_login_at = NOW() WHERE staff_id = ?', [staff.staff_id])

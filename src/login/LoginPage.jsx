@@ -45,7 +45,7 @@ export default function LoginPage() {
         return
       }
 
-      navigate({ to: '/dashboard' })
+      navigate({ to: data.user?.role === 'SYSTEM_ADMIN' ? '/admin' : '/dashboard' })
     } catch {
       setError('Unable to reach the server. Please try again.')
     } finally {
