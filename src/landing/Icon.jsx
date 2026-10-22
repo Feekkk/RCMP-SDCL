@@ -154,6 +154,12 @@ export default function Icon({ name }) {
           <circle cx="12" cy="9.3" r="2.4" stroke="currentColor" strokeWidth="1.6" />
         </svg>
       )
+    case 'chevron-down':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
     case 'wifi':
       return (
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

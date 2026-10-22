@@ -1,20 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import logo from '../assets/unikl-official.png'
+import Icon from './Icon.jsx'
 
-const NAV_LINKS = [
-  { label: 'Home', to: '/', id: 'home' },
-  { label: 'Welfare & Medical', to: '/sd', id: 'sd' },
-  { label: 'Parking & Coupons', to: '/cl', id: 'cl' },
-  { label: 'Hostel', to: '/srd', id: 'srd' },
+const UNITS = [
+  {
+    id: 'sd',
+    label: 'Student Development',
+    to: '/sd',
+    services: [
+      { label: 'Student Welfare Application', to: '/sd/welfare' },
+      { label: 'Medical Outpatient Application', to: '/sd/medical' },
+    ],
+  },
+  {
+    id: 'cl',
+    label: 'Campus Lifestyle',
+    to: '/cl',
+    services: [
+      { label: 'Request Parking Sticker', to: '/cl/parking' },
+      { label: 'Food Coupon', to: '/cl/food-coupon' },
+    ],
+  },
+  {
+    id: 'srd',
+    label: 'Student Residential',
+    to: '/srd',
+    soon: true,
+    services: [{ label: 'Hostel Listings', to: '/srd' }],
+  },
 ]
 
 export default function Header() {
   const location = useLocation()
 
   const [menuOpen, setMenuOpen] = useState(false)
+  const [openUnit, setOpenUnit] = useState(null)
   const [scrolled, setScrolled] = useState(false)
   const [scrollPct, setScrollPct] = useState(0)
+  const navRef = useRef(null)
 
   useEffect(() => {
     const onScroll = () => {
@@ -29,8 +53,18 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [location.pathname])
 
-  const isLinkActive = (link) =>
-    link.id === 'home' ? location.pathname === '/' : location.pathname.startsWith(link.to)
+  useEffect(() => {
+    const onClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setOpenUnit(null)
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    return () => document.removeEventListener('mousedown', onClickOutside)
+  }, [])
+
+  const isUnitActive = (unit) => location.pathname.startsWith(unit.to)
+  const isHomeActive = location.pathname === '/'
 
   return (
     <header className={`site-header ${scrolled ? 'site-header-scrolled' : ''}`}>
@@ -40,16 +74,32 @@ export default function Header() {
           <img src={logo} alt="UniKL Royal College of Medicine Perak" className="brand-logo" />
         </Link>
 
-        <nav className={`nav ${menuOpen ? 'nav-open' : ''}`}>
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.id}
-              to={link.to}
-              className={isLinkActive(link) ? 'nav-link-active' : ''}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
+        <nav className={`nav ${menuOpen ? 'nav-open' : ''}`} ref={navRef}>
+          <Link to="/" className={isHomeActive ? 'nav-link-active' : ''} onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
+
+          {UNITS.map((unit) => (
+            <div className={`nav-unit ${openUnit === unit.id ? 'nav-unit-open' : ''}`} key={unit.id}>
+              <button
+                type="button"
+                className={`nav-unit-trigger ${isUnitActive(unit) ? 'nav-link-active' : ''}`}
+                aria-expanded={openUnit === unit.id}
+                onClick={() => setOpenUnit((current) => (current === unit.id ? null : unit.id))}
+              >
+                {unit.label}
+                {unit.soon && <span className="nav-unit-soon">Soon</span>}
+                <Icon name="chevron-down" />
+              </button>
+
+              <div className="nav-dropdown">
+                {unit.services.map((service) => (
+                  <Link key={service.to} to={service.to} onClick={() => setMenuOpen(false)}>
+                    {service.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           ))}
         </nav>
 

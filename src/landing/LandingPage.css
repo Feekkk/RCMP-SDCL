@@ -144,6 +144,93 @@ html {
   background: var(--navy-800);
 }
 
+.nav-unit {
+  position: relative;
+}
+
+.nav-unit-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0 0 4px;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.nav-unit-trigger:hover {
+  color: var(--orange-dark);
+}
+
+.nav-unit-trigger.nav-link-active {
+  color: var(--navy-900);
+  font-weight: 700;
+}
+
+.nav-unit-trigger svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.nav-unit-open .nav-unit-trigger svg {
+  transform: rotate(180deg);
+}
+
+.nav-unit-soon {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(239, 125, 38, 0.14);
+  color: var(--orange-dark);
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 240px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 50;
+}
+
+.nav-unit-open .nav-dropdown {
+  display: flex;
+}
+
+.nav-dropdown a {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: normal;
+}
+
+.nav-dropdown a::after {
+  display: none;
+}
+
+.nav-dropdown a:hover {
+  background: var(--bg-alt);
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -1010,14 +1097,31 @@ html {
     display: flex;
   }
 
-  .nav a {
+  .nav > a {
     width: 100%;
     padding: 14px 0;
     border-bottom: 1px solid var(--border);
   }
 
-  .nav a:last-child {
-    border-bottom: none;
+  .nav-unit {
+    width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-unit-trigger {
+    width: 100%;
+    justify-content: space-between;
+    padding: 14px 0;
+  }
+
+  .nav-dropdown {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: var(--bg-alt);
+    border-radius: 10px;
+    margin-bottom: 10px;
   }
 
   .menu-toggle {

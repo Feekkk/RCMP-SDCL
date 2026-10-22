@@ -2,7 +2,11 @@ import { Outlet, createRootRoute, createRoute, createRouter } from '@tanstack/re
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import LandingPage from './landing/LandingPage.jsx'
 import SDPage from './landing/SDPage.jsx'
+import WelfarePage from './landing/WelfarePage.jsx'
+import MedicalPage from './landing/MedicalPage.jsx'
 import CLPage from './landing/CLPage.jsx'
+import ParkingPage from './landing/ParkingPage.jsx'
+import FoodCouponPage from './landing/FoodCouponPage.jsx'
 import SRDPage from './landing/SRDPage.jsx'
 import BlogPage from './blog/BlogPage.jsx'
 import LoginPage from './login/LoginPage.jsx'
@@ -28,10 +32,34 @@ const sdRoute = createRoute({
   component: SDPage,
 })
 
+const sdWelfareRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/sd/welfare',
+  component: WelfarePage,
+})
+
+const sdMedicalRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/sd/medical',
+  component: MedicalPage,
+})
+
 const clRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/cl',
   component: CLPage,
+})
+
+const clParkingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/cl/parking',
+  component: ParkingPage,
+})
+
+const clFoodCouponRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/cl/food-coupon',
+  component: FoodCouponPage,
 })
 
 const srdRoute = createRoute({
@@ -52,7 +80,18 @@ const loginRoute = createRoute({
   component: LoginPage,
 })
 
-const routeTree = rootRoute.addChildren([indexRoute, sdRoute, clRoute, srdRoute, blogRoute, loginRoute])
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  sdRoute,
+  sdWelfareRoute,
+  sdMedicalRoute,
+  clRoute,
+  clParkingRoute,
+  clFoodCouponRoute,
+  srdRoute,
+  blogRoute,
+  loginRoute,
+])
 
 export const router = createRouter({
   routeTree,

@@ -18,6 +18,80 @@
   font-size: 46px;
 }
 
+.unit-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--navy-800);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.unit-breadcrumb:hover {
+  color: var(--orange-dark);
+}
+
+/* ---------- Unit overview service grid ---------- */
+
+.unit-service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+.unit-service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  text-decoration: none;
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.unit-service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.unit-service-card h3 {
+  font-size: 19px;
+  margin: 0;
+}
+
+.unit-service-card p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+
+.unit-service-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.unit-service-cta svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* ---------- Module sections ---------- */
 
 .module-section {
@@ -626,6 +700,10 @@
 
   .hostel-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .unit-service-grid {
+    grid-template-columns: 1fr;
   }
 }
 
