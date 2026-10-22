@@ -10,6 +10,7 @@ import FoodCouponPage from './landing/FoodCouponPage.jsx'
 import SRDPage from './landing/SRDPage.jsx'
 import BlogPage from './blog/BlogPage.jsx'
 import LoginPage from './login/LoginPage.jsx'
+import DashboardPage from './dashboard/DashboardPage.jsx'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -80,6 +81,12 @@ const loginRoute = createRoute({
   component: LoginPage,
 })
 
+const dashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/dashboard',
+  component: DashboardPage,
+})
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   sdRoute,
@@ -91,6 +98,7 @@ const routeTree = rootRoute.addChildren([
   srdRoute,
   blogRoute,
   loginRoute,
+  dashboardRoute,
 ])
 
 export const router = createRouter({

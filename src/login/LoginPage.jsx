@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import logo from '../assets/unikl-official.png'
 import Icon from '../landing/Icon.jsx'
 import './LoginPage.css'
@@ -10,6 +10,7 @@ const ROLES = [
 ]
 
 export default function LoginPage() {
+  const navigate = useNavigate()
   const [role, setRole] = useState('student')
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
@@ -20,7 +21,7 @@ export default function LoginPage() {
 
   const activeRole = ROLES.find((r) => r.id === role)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
 
@@ -30,9 +31,26 @@ export default function LoginPage() {
     }
 
     setSubmitting(true)
-    window.setTimeout(() => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ role, identifier: id.trim(), password }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error ?? 'Unable to sign in. Please try again.')
+        return
+      }
+
+      navigate({ to: '/dashboard' })
+    } catch {
+      setError('Unable to reach the server. Please try again.')
+    } finally {
       setSubmitting(false)
-    }, 900)
+    }
   }
 
   return (
