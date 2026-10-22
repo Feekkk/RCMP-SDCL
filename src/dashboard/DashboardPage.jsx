@@ -13,6 +13,14 @@ export default function DashboardPage() {
       .then(async (res) => {
         if (!res.ok) throw new Error('Not authenticated')
         const data = await res.json()
+        if (data.user?.role === 'SYSTEM_ADMIN') {
+          navigate({ to: '/admin' })
+          return
+        }
+        if (data.user?.role === 'STUDENT') {
+          navigate({ to: '/student' })
+          return
+        }
         setUser(data.user)
       })
       .catch(() => {

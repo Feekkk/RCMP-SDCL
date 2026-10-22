@@ -75,11 +75,6 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
-
-          <a href="#blog" className="scroll-cue" aria-label="Scroll to campus blog">
-            <span>Scroll to explore</span>
-            <Icon name="arrow-down" />
-          </a>
         </section>
 
         <section id="blog" className="home-blog">

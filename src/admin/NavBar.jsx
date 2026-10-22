@@ -13,7 +13,7 @@ export default function NavBar({ user, onLogout }) {
   const location = useLocation()
 
   return (
-    <aside className="flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card">
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-border bg-card">
       <div className="flex items-center gap-3 border-b border-border px-5 py-5">
         <img src={uniklLogo} alt="UniKL" className="size-9 shrink-0 rounded-md object-contain" />
         <div className="min-w-0">
