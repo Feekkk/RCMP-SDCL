@@ -719,4 +719,145 @@
   .hostel-grid {
     grid-template-columns: 1fr;
   }
+
+  .fund-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Fund categories ---------- */
+
+.fund-section-head {
+  max-width: 640px;
+  margin-bottom: 44px;
+}
+
+.fund-section-head h2 {
+  margin: 10px 0 0;
+  font-size: 30px;
+}
+
+.fund-section-head p {
+  margin-top: 14px;
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.fund-list {
+  border-top: 1px solid var(--border);
+}
+
+.fund-row {
+  display: grid;
+  grid-template-columns: 48px 32px 1fr;
+  gap: 20px;
+  padding: 30px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.fund-row-index {
+  font-family: 'Serif Flared Jihe', var(--heading);
+  font-size: 26px;
+  line-height: 1;
+  color: var(--border);
+}
+
+.fund-row-icon {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+  color: var(--navy-800);
+}
+
+.fund-row-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.fund-row-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.fund-row-heading h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--text-h);
+}
+
+.fund-row-amount {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--orange-dark);
+  white-space: nowrap;
+}
+
+.fund-summary {
+  margin: 8px 0 0;
+  color: var(--text-soft);
+  font-size: 14.5px;
+  line-height: 1.65;
+  max-width: 62ch;
+}
+
+.fund-row-footer {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.fund-doc-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.fund-doc-value {
+  font-size: 13px;
+  color: var(--navy-800);
+}
+
+.fund-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--orange);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.fund-note svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--orange-dark);
+}
+
+@media (max-width: 640px) {
+  .fund-row {
+    grid-template-columns: 28px 1fr;
+  }
+
+  .fund-row-icon {
+    display: none;
+  }
+
+  .fund-row-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
 }

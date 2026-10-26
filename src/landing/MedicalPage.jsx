@@ -4,8 +4,19 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import FundCategoryGrid from './FundCategoryGrid.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
+
+const MEDICAL_CATEGORIES = [
+  {
+    icon: 'cross',
+    title: 'Medical Outpatient',
+    amount: 'Up to RM100 per year',
+    summary: 'Outpatient treatment only — clinic visits, minor procedures, and prescribed medications.',
+    documents: 'Supporting documents, submitted within 1 month of the treatment or visit date',
+  },
+]
 
 const MEDICAL_STEPS = [
   {
@@ -121,6 +132,23 @@ export default function MedicalPage() {
                 <FlowCard title="Approval flow" steps={MEDICAL_STEPS} />
               </Reveal>
             </div>
+          </div>
+        </section>
+
+        <section className="module-section module-section-alt">
+          <div className="container">
+            <Reveal as="div" className="fund-section-head">
+              <span className="eyebrow">What you can apply for</span>
+              <h2>Outpatient category and claim limit</h2>
+              <p>
+                This is the category currently available under Medical Outpatient. More
+                categories may be added as the committee confirms them.
+              </p>
+            </Reveal>
+
+            <Reveal as="div" delay={100}>
+              <FundCategoryGrid categories={MEDICAL_CATEGORIES} />
+            </Reveal>
           </div>
         </section>
       </main>

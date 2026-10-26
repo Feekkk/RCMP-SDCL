@@ -203,6 +203,33 @@ export default function Icon({ name }) {
           <path d="M6 18c3-4 6-7 11-11.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
         </svg>
       )
+    case 'utensils':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 3v7a2 2 0 0 0 4 0V3M9 10v11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M16 3c-1.4 0-2.5 1.8-2.5 5s1.1 4 2.5 4v9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'cross':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M12 8v8M8 12h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      )
+    case 'heart':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 20.5s-7.5-4.6-9.7-9.1C.9 7.9 2.4 4.5 5.7 3.7c2-.5 3.9.3 5 1.9 1.1-1.6 3-2.4 5-1.9 3.3.8 4.8 4.2 3.4 7.7C19.5 15.9 12 20.5 12 20.5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'storm':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17a4 4 0 0 1-.5-7.9 5 5 0 0 1 9.6-1.6A4.5 4.5 0 0 1 17 17H7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M13 17l-2 4M9 17l-1.5 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+      )
     case 'external-link':
       return (
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

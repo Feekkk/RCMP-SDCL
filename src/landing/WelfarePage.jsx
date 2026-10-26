@@ -4,8 +4,69 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import FundCategoryGrid from './FundCategoryGrid.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
+
+const WELFARE_CATEGORIES = [
+  {
+    icon: 'fund',
+    title: 'Living Allowance / Accommodation',
+    amount: 'Up to RM500',
+    summary: 'One-off assistance for basic living or accommodation expenses.',
+    documents: 'Bank account / Statement',
+  },
+  {
+    icon: 'laptop',
+    title: 'Learning Aid',
+    amount: 'Up to RM1,500 per study period',
+    summary: 'For a laptop or study-related gadgets. Mobile phones and entertainment devices are not covered.',
+    documents: 'Bank account / Statement',
+    note: 'You must not already be receiving related financial aid, loans, or sponsorship from external sponsors.',
+  },
+  {
+    icon: 'utensils',
+    title: 'UniKL Meal Initiative (UMI)',
+    amount: 'Basic meal support',
+    summary: 'Covers basic meals only — not for non-essential food expenses.',
+    documents: 'Bank account / Statement',
+  },
+  {
+    icon: 'cross',
+    title: 'Medical Support & Supply',
+    amount: 'Up to RM200',
+    summary: 'One-time support during your studies for non-cosmetic medical aids, such as crutches, arm slings, back supports, or prescription glasses.',
+    documents: 'Health report from a Certified Doctor',
+  },
+  {
+    icon: 'heart',
+    title: 'Bereavement',
+    amount: 'RM1,000 / RM200',
+    summary: 'RM1,000 to the next of kin upon the death of a registered UniKL student, or RM200 upon the death of a parent or spouse (each). Next-of-kin priority: spouse, then parent(s).',
+    documents: 'Death certificate + Proof of relationship',
+  },
+  {
+    icon: 'map-pin',
+    title: 'Travel Assistance (Bereavement)',
+    amount: 'RM50 / RM300',
+    summary: 'One-off travel assistance to return to your hometown due to the death of a parent or spouse. RM50 within Peninsular Malaysia, RM300 between East and Peninsular Malaysia.',
+    documents: 'Death certificate + Proof of relationship',
+  },
+  {
+    icon: 'storm',
+    title: 'Natural Disasters',
+    amount: 'RM200 per accident',
+    summary: 'For eligible accidents in Malaysia during active study — floods, storms, thunderstorms, landslides, building collapse, fallen trees, or fires.',
+    documents: 'Photos of the disaster + Police report',
+  },
+  {
+    icon: 'info',
+    title: 'Others',
+    amount: 'Case-by-case',
+    summary: "For matters not covered by the categories above but that significantly affect your safety, well-being, or ability to study. Explain your case clearly.",
+    documents: 'As requested by the committee',
+  },
+]
 
 const WELFARE_STEPS = [
   {
@@ -114,6 +175,24 @@ export default function WelfarePage() {
                 <FlowCard title="Approval flow" steps={WELFARE_STEPS} />
               </Reveal>
             </div>
+          </div>
+        </section>
+
+        <section className="module-section module-section-alt">
+          <div className="container">
+            <Reveal as="div" className="fund-section-head">
+              <span className="eyebrow">What you can apply for</span>
+              <h2>8 welfare categories, each with its own amount and documents</h2>
+              <p>
+                Pick the category that matches your situation when you apply. The amount,
+                frequency, and required documents below are a guide — the application form will
+                confirm exactly what you need to submit.
+              </p>
+            </Reveal>
+
+            <Reveal as="div" delay={100}>
+              <FundCategoryGrid categories={WELFARE_CATEGORIES} />
+            </Reveal>
           </div>
         </section>
       </main>

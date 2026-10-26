@@ -14,7 +14,7 @@ The portal is split into **units**, each with **modules**. Build each unit as a 
 | Campus Lifestyle (CL) | Food Coupon | Student -> any CL staff. One-time approval. A digital coupon then appears for the student to claim; staff redeem it; it then expires. Unclaimed coupons do **not** expire. |
 | Student Residential (SRD), **coming soon** | CRM for Hostel; CMS | CMS: SRD staff post hostel blogs and room details, shown **publicly** (no login). CRM scope is undecided. |
 
-Welfare and Medical both have **categories with different requirements**. Requirement details are not supplied yet. Design categories as data (a `categories` table with configurable required fields and documents), not hard-coded, so they can be filled in later.
+Welfare and Medical both have **categories with different requirements** (amount, frequency, and supporting documents). Design categories as data (a `categories` table with configurable required fields and documents), not hard-coded — see [Welfare and Medical categories](#welfare-and-medical-categories) for the confirmed list.
 
 ## Roles and access
 - Roles: Student (User), staff per unit (SD staff, CL staff, SRD staff), System Admin, HOD and DD (Medical approvers), CEO and Board (Welfare approvers).
@@ -31,6 +31,26 @@ Welfare and Medical both have **categories with different requirements**. Requir
 
 ## Student profile (completed first, before any application)
 Fields: Microsoft SSO email and name, student ID, program, current semester (based on the application), contact number, bank name, bank number.
+
+## Welfare and Medical categories
+Confirmed category list, amounts, and required documents (source of truth for seeding the `categories` table). All are one-off/one-time unless stated otherwise.
+
+**Student Welfare Application**
+| Category | Amount | Notes | Supporting documents |
+|---|---|---|---|
+| Living Allowance / Accommodation | Up to RM500 | Basic living or accommodation expenses | Bank account / statement |
+| Learning Aid | Up to RM1,500 for the entire study period | Laptop or study-related gadgets only; mobile phones and entertainment devices excluded. Applicant must not already receive related financial aid, loans, or sponsorship from external sponsors | Bank account / statement |
+| UniKL Meal Initiative (UMI) | Not specified | Basic meals only, not for non-essential food expenses | Bank account / statement |
+| Medical Support & Supply | Up to RM200 | One-time per study period, for non-cosmetic medical aids (crutches, arm slings, back supports, prescription glasses) | Health report from a certified specialist doctor |
+| Bereavement | RM1,000 (next of kin of a registered student) / RM200 per parent or spouse | Next-of-kin priority: spouse, then parent(s) | Death certificate + proof of relationship |
+| Travel Assistance (Bereavement) | RM50 within Peninsular Malaysia / RM300 between East and Peninsular Malaysia | One-off, to return to hometown due to the death of a parent or spouse | Death certificate + proof of relationship |
+| Natural Disasters | RM200 per accident | Eligible accidents in Malaysia during active study: floods, storms, thunderstorms, landslides, building collapse, fallen trees, fires | Photos of the disaster + police report |
+| Others | Case-by-case | For matters not covered above but significantly affecting safety, well-being, or ability to study; applicant explains the case | Documents as requested by the committee |
+
+**Medical Outpatient Application**
+| Category | Amount | Notes | Supporting documents |
+|---|---|---|---|
+| Medical Outpatient | RM100 per year | Outpatient treatment only (clinic visits, minor procedures, prescribed medications); must submit within 1 month of the treatment/visit date | Supporting documents from the visit |
 
 ## Security and legal rules (important)
 - **Reversible encryption** for phone number and bank number (use authenticated encryption such as AES-256-GCM; the key comes from environment or secret storage, never from the repo). Do not hash these fields.
@@ -60,7 +80,6 @@ Fields: Microsoft SSO email and name, student ID, program, current semester (bas
 6. SRD (CMS first, CRM once scoped)
 
 ## Open items (do not guess; ask the user)
-- Category requirements for Welfare and Medical
 - Go-live date or phases
 - Requirements document (to be attached by the user)
 - Hostel CRM scope (enquiries and bookings, or complaints and maintenance)
