@@ -14,7 +14,6 @@ import {
 } from 'lucide-react'
 import NavBar from './NavBar.jsx'
 import ConsentModal from './ConsentModal.jsx'
-import { STATUS } from './applicationStatus.js'
 import { useRoleGuard } from '@/lib/useRoleGuard'
 import { logout } from '@/lib/useAuth'
 import { Button } from '@/components/ui/button'
@@ -225,39 +224,6 @@ export default function StudentDashboard() {
               <Button size="sm" variant="secondary" className="shrink-0 sm:self-center" asChild>
                 <Link to="/student/profile">Complete profile</Link>
               </Button>
-            </div>
-          )}
-
-          {/* Recent activity */}
-          {applications && applications.length > 0 && (
-            <div className="mt-8 rounded-2xl border border-border bg-card p-5">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-foreground">Recent activity</h2>
-                <Link
-                  to="/student/applications"
-                  className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                >
-                  View all
-                  <ArrowRight className="size-3.5" />
-                </Link>
-              </div>
-              <div className="mt-3 divide-y divide-border">
-                {applications.slice(0, 3).map((app) => {
-                  const status = STATUS[app.status] ?? STATUS.PENDING
-                  const StatusIcon = status.icon
-                  return (
-                    <div key={app.id} className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0">
-                      <p className="truncate text-sm text-foreground">{app.categoryName}</p>
-                      <span
-                        className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}
-                      >
-                        <StatusIcon className="size-3.5" />
-                        {status.label}
-                      </span>
-                    </div>
-                  )
-                })}
-              </div>
             </div>
           )}
 

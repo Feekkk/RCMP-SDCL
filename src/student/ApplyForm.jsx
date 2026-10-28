@@ -41,7 +41,7 @@ const STEPS = [
 // are data) — this only controls which extra fields the form shows.
 const CATEGORY_FORM = {
   'living-allowance': { basicDetails: true, amount: 'Recommended below RM500', purpose: true, dependants: true },
-  'learning-aid': { basicDetails: true, dependants: true },
+  'learning-aid': { basicDetails: true, dependants: true, justification: true },
   umi: { basicDetails: true, dependants: true },
   bereavement: { basicDetails: true, allocation: true },
   'travel-assistance-bereavement': { basicDetails: true },
@@ -81,6 +81,12 @@ export default function ApplyForm({ module, title, backHref }) {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [submittedNo, setSubmittedNo] = useState('')
+  // Briefly disables the Submit button right after landing on Review, so a
+  // fast double-click that moved Next -> Review can't also land on Submit
+  // (same screen position, different button) before the student has had a
+  // chance to actually see the review.
+  const [reviewCooldown, setReviewCooldown] = useState(false)
 
   // Category-specific fields (FORM.md).
   const [amount, setAmount] = useState('')
@@ -117,6 +123,13 @@ export default function ApplyForm({ module, title, backHref }) {
       })
       .catch(() => setLoadError('Could not load your application details. Please try again.'))
   }, [ready, module])
+
+  useEffect(() => {
+    if (step !== STEPS.length - 1) return
+    setReviewCooldown(true)
+    const timer = setTimeout(() => setReviewCooldown(false), 500)
+    return () => clearTimeout(timer)
+  }, [step])
 
   const category = categories?.find((c) => String(c.id) === categoryId) ?? null
   const fields = CATEGORY_FORM[category?.code] ?? {}
@@ -198,6 +211,10 @@ export default function ApplyForm({ module, title, backHref }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    // Guards against the browser implicitly submitting the form (e.g. the
+    // Enter key after confirming a file picker on the Documents step) before
+    // the student has actually reached and seen the Review step.
+    if (step !== STEPS.length - 1 || reviewCooldown) return
     if (!category || !allDocumentsAttached || !detailsStepComplete) return
 
     setSubmitting(true)
@@ -217,6 +234,8 @@ export default function ApplyForm({ module, title, backHref }) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Could not submit your application.')
       }
+      const data = await res.json()
+      setSubmittedNo(data.applicationNo ?? '')
       setSubmitted(true)
     } catch (err) {
       setSubmitError(err.message || 'Could not submit your application. Please try again.')
@@ -265,6 +284,11 @@ export default function ApplyForm({ module, title, backHref }) {
             <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-10 text-center">
               <CheckCircle2 className="size-8 text-emerald-600" />
               <h2 className="text-base font-semibold text-foreground">Application submitted</h2>
+              {submittedNo && (
+                <span className="rounded-full bg-primary/10 px-3 py-1 font-mono text-xs font-semibold text-primary">
+                  {submittedNo}
+                </span>
+              )}
               <p className="max-w-sm text-sm text-muted-foreground">
                 You&apos;ll be notified by email once there&apos;s a decision. You can track its status
                 from your dashboard.
@@ -401,6 +425,7 @@ export default function ApplyForm({ module, title, backHref }) {
                           <Label htmlFor="purpose">Purpose of Application</Label>
                           <textarea
                             id="purpose"
+                            placeholder="Explain why you are applying for this category."
                             rows={3}
                             value={purpose}
                             onChange={(event) => setPurpose(event.target.value)}
@@ -435,6 +460,11 @@ export default function ApplyForm({ module, title, backHref }) {
                           <textarea
                             id="justification"
                             rows={4}
+                            placeholder={
+                              category?.code === 'learning-aid'
+                                ? 'Explain what you need and confirm you are not already receiving related financial aid, loans, or sponsorship from external sponsors.'
+                                : undefined
+                            }
                             value={justification}
                             onChange={(event) => setJustification(event.target.value)}
                             className={textareaClass}
@@ -468,6 +498,7 @@ export default function ApplyForm({ module, title, backHref }) {
                               </Label>
                               <Input
                                 id="clinicName"
+                                placeholder="e.g. Klinik Kesihatan"
                                 value={medicalClaim.clinicName}
                                 onChange={(event) =>
                                   setMedicalClaim((prev) => ({ ...prev, clinicName: event.target.value }))
@@ -481,6 +512,7 @@ export default function ApplyForm({ module, title, backHref }) {
                               </Label>
                               <textarea
                                 id="description"
+                                placeholder="e.g. Consultation and medication for flu symptoms"
                                 rows={3}
                                 value={medicalClaim.description}
                                 onChange={(event) =>
@@ -496,6 +528,7 @@ export default function ApplyForm({ module, title, backHref }) {
                               </Label>
                               <Input
                                 id="amountPaid"
+                                placeholder="RM"
                                 type="number"
                                 min="0"
                                 step="0.01"
@@ -589,7 +622,6 @@ export default function ApplyForm({ module, title, backHref }) {
                               accept=".pdf,.jpg,.jpeg,.png"
                               onChange={handleFileChange(index)}
                               className="sr-only"
-                              required
                             />
                           </div>
                         ))}
@@ -606,6 +638,21 @@ export default function ApplyForm({ module, title, backHref }) {
                           <span className="text-muted-foreground">Category</span>
                           <span className="text-right font-medium text-foreground">{category.name}</span>
                         </div>
+                        {fields.basicDetails && profile && (
+                          <div className="flex items-start justify-between gap-3">
+                            <span className="shrink-0 text-muted-foreground">Basic Details</span>
+                            <dl className="max-w-[70%] space-y-0.5 text-right text-foreground">
+                              <div>{profile.name}</div>
+                              <div>{profile.studentId}</div>
+                              <div>{profile.program}</div>
+                              <div>{profile.email}</div>
+                              <div>{profile.contactNumber}</div>
+                              <div>
+                                {profile.bankName} · {profile.bankNumber}
+                              </div>
+                            </dl>
+                          </div>
+                        )}
                         {fields.amount && (
                           <div className="flex items-start justify-between gap-3">
                             <span className="shrink-0 text-muted-foreground">Amount Requested</span>
@@ -653,10 +700,15 @@ export default function ApplyForm({ module, title, backHref }) {
                         )}
                         <div className="flex items-start justify-between gap-3">
                           <span className="shrink-0 text-muted-foreground">Documents</span>
-                          <ul className="text-right text-foreground">
+                          <ul className="max-w-[70%] space-y-1 text-right text-foreground">
                             {requiredDocuments.map((doc, index) => (
-                              <li key={doc.label} className="truncate">
-                                {files[index]?.name ?? doc.label}
+                              <li key={doc.label}>
+                                <p className="truncate font-medium">{doc.label}</p>
+                                <p className="truncate text-xs text-muted-foreground">
+                                  {files[index]
+                                    ? `${files[index].name} · ${(files[index].size / 1024).toFixed(0)} KB`
+                                    : 'Not attached'}
+                                </p>
                               </li>
                             ))}
                           </ul>
@@ -689,7 +741,7 @@ export default function ApplyForm({ module, title, backHref }) {
                       <ArrowRight className="size-4" />
                     </Button>
                   ) : (
-                    <Button type="submit" disabled={submitting || !allDocumentsAttached}>
+                    <Button type="submit" disabled={submitting || reviewCooldown || !allDocumentsAttached}>
                       {submitting ? 'Submitting…' : 'Submit application'}
                     </Button>
                   )}

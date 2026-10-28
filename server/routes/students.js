@@ -9,6 +9,13 @@ import { uploadApplicationDocuments, UPLOAD_ROOT } from '../lib/uploads.js'
 
 export const studentsRouter = Router()
 
+// Human-readable reference built from the module and the row's own
+// auto-increment id, so it's unique and always increasing without a
+// separate sequence/counter to keep in sync. Stored on the row itself
+// (application_no, uniquely indexed) so lookups don't need to recompute it.
+const MODULE_PREFIX = { WELFARE: 'WEL', MEDICAL: 'MED' }
+const buildApplicationNo = (module, id) => `${MODULE_PREFIX[module] ?? 'APP'}-${String(id).padStart(6, '0')}`
+
 studentsRouter.use(requireAuth, requireRole('STUDENT'))
 
 // Profile is completed first, before any application (CLAUDE.md).
@@ -190,7 +197,8 @@ studentsRouter.get('/categories', async (req, res) => {
 
 studentsRouter.get('/me/applications', async (req, res) => {
   const [rows] = await pool.query(
-    `SELECT a.id, a.module, a.status, a.reason, a.submitted_at, a.decided_at, c.name AS category_name
+    `SELECT a.id, a.application_no, a.module, a.status, a.reason, a.submitted_at, a.decided_at,
+            c.name AS category_name
        FROM applications a
        JOIN categories c ON c.id = a.category_id
       WHERE a.student_id = ?
@@ -201,6 +209,7 @@ studentsRouter.get('/me/applications', async (req, res) => {
   return res.json(
     rows.map((row) => ({
       id: row.id,
+      applicationNo: row.application_no,
       module: row.module,
       categoryName: row.category_name,
       status: row.status,
@@ -263,6 +272,11 @@ studentsRouter.post('/me/applications', (req, res, next) => {
       [req.user.sub, category.id, category.module, reason, details ? JSON.stringify(details) : null],
     )
     const applicationId = result.insertId
+    const applicationNo = buildApplicationNo(category.module, applicationId)
+    await connection.query('UPDATE applications SET application_no = ? WHERE id = ?', [
+      applicationNo,
+      applicationId,
+    ])
 
     for (const [index, file] of files.entries()) {
       await connection.query(
@@ -292,7 +306,11 @@ studentsRouter.post('/me/applications', (req, res, next) => {
       req,
     })
 
-    return res.status(201).json({ id: applicationId, status: 'PENDING' })
+    return res.status(201).json({
+      id: applicationId,
+      applicationNo,
+      status: 'PENDING',
+    })
   } catch (err) {
     await connection.rollback()
     console.error(err)

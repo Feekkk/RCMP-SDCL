@@ -84,53 +84,58 @@ export default function MyApplications() {
 
           {applications && (
             applications.length > 0 ? (
-              <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
-                {applications.map((app) => {
-                  const status = STATUS[app.status] ?? STATUS.PENDING
-                  const StatusIcon = status.icon
-                  const ModuleIcon = MODULE_ICON[app.module] ?? ClipboardList
-                  return (
-                    <div
-                      key={app.id}
-                      className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-5"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-start gap-3">
-                          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                            <ModuleIcon className="size-4.5" />
-                          </div>
-                          <div>
-                            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                              {MODULE_LABEL[app.module] ?? app.module}
-                            </p>
-                            <p className="text-sm font-semibold text-foreground">{app.categoryName}</p>
-                          </div>
-                        </div>
-                        <span
-                          className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}
-                        >
-                          <StatusIcon className="size-3.5" />
-                          {status.label}
-                        </span>
-                      </div>
-
-                      <dl className="grid grid-cols-2 gap-3 rounded-xl bg-muted/30 px-4 py-3 text-sm">
-                        <div>
-                          <dt className="text-xs text-muted-foreground">Submitted</dt>
-                          <dd className="mt-0.5 font-medium text-foreground">
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-card">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-xs text-muted-foreground">
+                      <th className="px-5 py-3 font-medium">Application No.</th>
+                      <th className="px-5 py-3 font-medium">Module</th>
+                      <th className="px-5 py-3 font-medium">Category</th>
+                      <th className="px-5 py-3 font-medium">Status</th>
+                      <th className="px-5 py-3 font-medium">Submitted</th>
+                      <th className="px-5 py-3 font-medium">Decided</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {applications.map((app) => {
+                      const status = STATUS[app.status] ?? STATUS.PENDING
+                      const StatusIcon = status.icon
+                      const ModuleIcon = MODULE_ICON[app.module] ?? ClipboardList
+                      return (
+                        <tr key={app.id}>
+                          <td className="px-5 py-3.5 font-mono text-xs font-medium text-foreground">
+                            {app.applicationNo}
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <div className="flex items-center gap-2.5">
+                              <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                <ModuleIcon className="size-4" />
+                              </div>
+                              <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                                {MODULE_LABEL[app.module] ?? app.module}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-5 py-3.5 font-semibold text-foreground">{app.categoryName}</td>
+                          <td className="px-5 py-3.5">
+                            <span
+                              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}
+                            >
+                              <StatusIcon className="size-3.5" />
+                              {status.label}
+                            </span>
+                          </td>
+                          <td className="px-5 py-3.5 text-muted-foreground">
                             {new Date(app.submittedAt).toLocaleDateString()}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-xs text-muted-foreground">Decided</dt>
-                          <dd className="mt-0.5 font-medium text-foreground">
+                          </td>
+                          <td className="px-5 py-3.5 text-muted-foreground">
                             {app.decidedAt ? new Date(app.decidedAt).toLocaleDateString() : '—'}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                  )
-                })}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
             ) : (
               <div className="mt-8 flex flex-col items-center gap-2 rounded-2xl border border-dashed border-border py-16 text-center">
