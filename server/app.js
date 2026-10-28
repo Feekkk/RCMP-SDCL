@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import { authRouter } from './routes/auth.js'
 import { studentsRouter } from './routes/students.js'
 import { adminRouter } from './routes/admin.js'
+import { fundsRouter } from './routes/funds.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const distDir = path.resolve(__dirname, '..', 'dist')
@@ -19,6 +20,7 @@ export function createApp() {
 
   app.use('/api/auth', authRouter)
   app.use('/api/students', studentsRouter)
+  app.use('/api/admin/funds', fundsRouter)
   app.use('/api/admin', adminRouter)
 
   app.use(express.static(distDir))

@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /student
+Disallow: /student/
+Disallow: /dashboard
+Disallow: /login
+
+# TODO: replace with the confirmed production domain once hosting is finalized
+Sitemap: https://sdcl.unikl.edu.my/sitemap.xml

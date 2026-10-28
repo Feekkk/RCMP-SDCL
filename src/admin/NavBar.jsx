@@ -1,5 +1,5 @@
 import { Link, useLocation } from '@tanstack/react-router'
-import { LayoutDashboard, LogOut, Users } from 'lucide-react'
+import { LayoutDashboard, LogOut, Users, Wallet } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import uniklLogo from '@/assets/unikl-official.png'
@@ -7,6 +7,7 @@ import uniklLogo from '@/assets/unikl-official.png'
 const LINKS = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/users', label: 'Manage Users', icon: Users },
+  { to: '/admin/funds', label: 'Manage Funds', icon: Wallet },
 ]
 
 export default function NavBar({ user, onLogout }) {

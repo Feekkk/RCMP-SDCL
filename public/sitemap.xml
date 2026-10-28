@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: replace https://sdcl.unikl.edu.my with the confirmed production domain -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://sdcl.unikl.edu.my/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/sd</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/sd/welfare</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/sd/medical</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/cl</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/cl/parking</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/cl/food-coupon</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/srd</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sdcl.unikl.edu.my/blog</loc>
+    <priority>0.6</priority>
+  </url>
+</urlset>

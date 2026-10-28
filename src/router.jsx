@@ -13,6 +13,7 @@ import LoginPage from './login/LoginPage.jsx'
 import DashboardPage from './dashboard/DashboardPage.jsx'
 import AdminDashboard from './admin/Dashboard.jsx'
 import ManageUser from './admin/ManageUser.jsx'
+import ManageFunds from './admin/ManageFunds.jsx'
 import StudentDashboard from './student/Dashboard.jsx'
 import StudentProfile from './student/Profile.jsx'
 import MyApplications from './student/MyApplications.jsx'
@@ -106,6 +107,12 @@ const adminUsersRoute = createRoute({
   component: ManageUser,
 })
 
+const adminFundsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin/funds',
+  component: ManageFunds,
+})
+
 const studentRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/student',
@@ -150,6 +157,7 @@ const routeTree = rootRoute.addChildren([
   dashboardRoute,
   adminRoute,
   adminUsersRoute,
+  adminFundsRoute,
   studentRoute,
   studentProfileRoute,
   studentApplicationsRoute,
