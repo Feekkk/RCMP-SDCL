@@ -45,8 +45,13 @@ export default function ConsentModal({ open, onAgreed }) {
         onInteractionOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Welcome to SDCL Student Portal </DialogTitle>
-          <DialogDescription>
+          <div className="flex items-center justify-center gap-4">
+            <img src="/unikl-official.png" alt="UniKL" className="h-10 w-auto" />
+            <div className="h-8 w-px bg-border" />
+            <img src="/sdcl-logo.png" alt="SDCL" className="h-10 w-auto" />
+          </div>
+          <DialogTitle className="mt-2 text-center">Welcome to SDCL Student Portal </DialogTitle>
+          <DialogDescription className="text-center">
             Before we get started, here&apos;s how we take care of your information.
           </DialogDescription>
         </DialogHeader>
@@ -58,8 +63,8 @@ export default function ConsentModal({ open, onAgreed }) {
           </p>
           <ul className="mt-2 list-disc space-y-1 pl-4">
             <li>
-              Your <strong>phone number and bank account</strong> are kept safe and private, and
-              we only use them to help with your requests.
+              Your <strong>phone number, bank account, and any dependants&apos; IC numbers</strong>{' '}
+              are kept safe and private, and we only use them to help with your requests.
             </li>
             <li>
               We keep your request history for <strong>4 years</strong>, just in case you or the

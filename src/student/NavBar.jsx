@@ -1,11 +1,12 @@
 import { Link, useLocation } from '@tanstack/react-router'
-import { LayoutDashboard, UserRound, LogOut } from 'lucide-react'
+import { LayoutDashboard, UserRound, ClipboardList, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import uniklLogo from '@/assets/unikl-official.png'
 
 const LINKS = [
   { to: '/student', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/student/applications', label: 'My Applications', icon: ClipboardList },
   { to: '/student/profile', label: 'My Profile', icon: UserRound },
 ]
 
@@ -46,8 +47,7 @@ export default function NavBar({ user, onLogout }) {
       <div className="border-t border-border px-3 py-4">
         {user && (
           <div className="mb-3 px-2">
-            <p className="truncate text-sm font-medium text-foreground">{user.name ?? user.sub}</p>
-            <p className="truncate text-xs text-muted-foreground">{user.email}</p>
+            <p className="truncate text-xs text-muted-foreground">System Version 1.0.0</p>
           </div>
         )}
         <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={onLogout}>

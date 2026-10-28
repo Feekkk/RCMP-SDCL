@@ -15,6 +15,9 @@ import AdminDashboard from './admin/Dashboard.jsx'
 import ManageUser from './admin/ManageUser.jsx'
 import StudentDashboard from './student/Dashboard.jsx'
 import StudentProfile from './student/Profile.jsx'
+import MyApplications from './student/MyApplications.jsx'
+import ApplyWelfare from './student/ApplyWelfare.jsx'
+import ApplyMedical from './student/ApplyMedical.jsx'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -115,6 +118,24 @@ const studentProfileRoute = createRoute({
   component: StudentProfile,
 })
 
+const studentApplicationsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/student/applications',
+  component: MyApplications,
+})
+
+const studentWelfareApplyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/student/welfare/apply',
+  component: ApplyWelfare,
+})
+
+const studentMedicalApplyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/student/medical/apply',
+  component: ApplyMedical,
+})
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   sdRoute,
@@ -131,6 +152,9 @@ const routeTree = rootRoute.addChildren([
   adminUsersRoute,
   studentRoute,
   studentProfileRoute,
+  studentApplicationsRoute,
+  studentWelfareApplyRoute,
+  studentMedicalApplyRoute,
 ])
 
 export const router = createRouter({

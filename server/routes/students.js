@@ -1,9 +1,11 @@
+import path from 'node:path'
 import { Router } from 'express'
 import { pool } from '../db.js'
 import { requireAuth } from '../middleware/auth.js'
 import { requireRole } from '../middleware/authorize.js'
 import { encryptField, decryptField } from '../lib/crypto.js'
 import { logAudit } from '../lib/audit.js'
+import { uploadApplicationDocuments, UPLOAD_ROOT } from '../lib/uploads.js'
 
 export const studentsRouter = Router()
 
@@ -63,6 +65,76 @@ studentsRouter.put('/me/profile', async (req, res) => {
   return res.json({ ok: true })
 })
 
+// Dependants are part of the profile (completed once, before any
+// application) rather than re-entered on every Welfare form that needs a
+// Dependants Form (CLAUDE.md: profile is completed first).
+studentsRouter.get('/me/dependants', async (req, res) => {
+  const [rows] = await pool.query(
+    `SELECT id, name, ic_number_enc, relationship, status, income
+       FROM dependants WHERE student_id = ? ORDER BY id ASC`,
+    [req.user.sub],
+  )
+
+  return res.json(
+    rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      icNumber: decryptField(row.ic_number_enc),
+      relationship: row.relationship,
+      status: row.status,
+      income: row.income,
+    })),
+  )
+})
+
+studentsRouter.put('/me/dependants', async (req, res) => {
+  const dependants = Array.isArray(req.body?.dependants) ? req.body.dependants : []
+
+  for (const d of dependants) {
+    if (!d.name?.trim() || !d.icNumber?.trim() || !d.relationship?.trim() || !d.status) {
+      return res.status(400).json({ error: 'Each dependant needs a name, IC number, relationship, and status' })
+    }
+  }
+
+  const connection = await pool.getConnection()
+  try {
+    await connection.beginTransaction()
+    await connection.query('DELETE FROM dependants WHERE student_id = ?', [req.user.sub])
+    for (const d of dependants) {
+      await connection.query(
+        `INSERT INTO dependants (student_id, name, ic_number_enc, relationship, status, income)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          req.user.sub,
+          d.name.trim(),
+          encryptField(d.icNumber.trim()),
+          d.relationship.trim(),
+          d.status,
+          d.income || null,
+        ],
+      )
+    }
+    await connection.commit()
+  } catch (err) {
+    await connection.rollback()
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  } finally {
+    connection.release()
+  }
+
+  await logAudit({
+    actorType: 'student',
+    actorId: req.user.sub,
+    action: 'DEPENDANTS_UPDATED',
+    entityType: 'student',
+    entityId: req.user.sub,
+    req,
+  })
+
+  return res.json({ ok: true })
+})
+
 // Consent is shown on first use and logged once (no versioning needed).
 studentsRouter.post('/me/consent', async (req, res) => {
   const [rows] = await pool.query('SELECT consent_at FROM students WHERE student_id = ? LIMIT 1', [
@@ -86,4 +158,146 @@ studentsRouter.post('/me/consent', async (req, res) => {
     req.user.sub,
   ])
   return res.json({ consentAt: updated[0].consent_at })
+})
+
+// Categories are data (CLAUDE.md), so the form's required fields/documents
+// come from here rather than being hard-coded per module.
+studentsRouter.get('/categories', async (req, res) => {
+  const module = String(req.query.module ?? '').toUpperCase()
+  if (!['WELFARE', 'MEDICAL'].includes(module)) {
+    return res.status(400).json({ error: 'module must be WELFARE or MEDICAL' })
+  }
+
+  const [rows] = await pool.query(
+    `SELECT id, code, name, amount_label, notes, required_documents
+       FROM categories
+      WHERE module = ? AND is_active = TRUE
+      ORDER BY sort_order ASC`,
+    [module],
+  )
+
+  return res.json(
+    rows.map((row) => ({
+      id: row.id,
+      code: row.code,
+      name: row.name,
+      amountLabel: row.amount_label,
+      notes: row.notes,
+      requiredDocuments: row.required_documents,
+    })),
+  )
+})
+
+studentsRouter.get('/me/applications', async (req, res) => {
+  const [rows] = await pool.query(
+    `SELECT a.id, a.module, a.status, a.reason, a.submitted_at, a.decided_at, c.name AS category_name
+       FROM applications a
+       JOIN categories c ON c.id = a.category_id
+      WHERE a.student_id = ?
+      ORDER BY a.submitted_at DESC`,
+    [req.user.sub],
+  )
+
+  return res.json(
+    rows.map((row) => ({
+      id: row.id,
+      module: row.module,
+      categoryName: row.category_name,
+      status: row.status,
+      reason: row.reason,
+      submittedAt: row.submitted_at,
+      decidedAt: row.decided_at,
+    })),
+  )
+})
+
+// Submits an application for the chosen category. Required documents are
+// uploaded in the same order as the category's required_documents list, one
+// file per entry — the form enforces this before it lets the student submit.
+studentsRouter.post('/me/applications', (req, res, next) => {
+  uploadApplicationDocuments(req, res, (err) => {
+    if (err) return res.status(400).json({ error: err.message })
+    return next()
+  })
+}, async (req, res) => {
+  const categoryId = Number(req.body?.categoryId)
+  const reason = req.body?.reason ?? null
+  const files = req.files ?? []
+
+  let details = null
+  if (req.body?.details) {
+    try {
+      details = JSON.parse(req.body.details)
+    } catch {
+      return res.status(400).json({ error: 'details must be valid JSON' })
+    }
+  }
+
+  if (!categoryId) {
+    return res.status(400).json({ error: 'categoryId is required' })
+  }
+
+  const [categoryRows] = await pool.query(
+    'SELECT id, module, required_documents FROM categories WHERE id = ? AND is_active = TRUE LIMIT 1',
+    [categoryId],
+  )
+  const category = categoryRows[0]
+  if (!category) {
+    return res.status(404).json({ error: 'Category not found' })
+  }
+
+  const requiredDocuments = category.required_documents
+  if (files.length !== requiredDocuments.length) {
+    return res.status(400).json({
+      error: `This category needs ${requiredDocuments.length} document(s), received ${files.length}.`,
+    })
+  }
+
+  const connection = await pool.getConnection()
+  try {
+    await connection.beginTransaction()
+
+    const [result] = await connection.query(
+      `INSERT INTO applications (student_id, category_id, module, reason, details)
+       VALUES (?, ?, ?, ?, ?)`,
+      [req.user.sub, category.id, category.module, reason, details ? JSON.stringify(details) : null],
+    )
+    const applicationId = result.insertId
+
+    for (const [index, file] of files.entries()) {
+      await connection.query(
+        `INSERT INTO application_documents
+           (application_id, label, original_filename, stored_path, mime_type, size_bytes)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          applicationId,
+          requiredDocuments[index]?.label ?? 'Supporting document',
+          file.originalname,
+          path.relative(UPLOAD_ROOT, file.path),
+          file.mimetype,
+          file.size,
+        ],
+      )
+    }
+
+    await connection.commit()
+
+    await logAudit({
+      actorType: 'student',
+      actorId: req.user.sub,
+      action: 'APPLICATION_SUBMITTED',
+      entityType: 'application',
+      entityId: String(applicationId),
+      details: { module: category.module, categoryId: category.id },
+      req,
+    })
+
+    return res.status(201).json({ id: applicationId, status: 'PENDING' })
+  } catch (err) {
+    await connection.rollback()
+    console.error(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  } finally {
+    connection.release()
+  }
 })

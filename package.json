@@ -24,6 +24,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^1.60.0",
+    "multer": "^2.5.0",
     "mysql2": "^3.24.6",
     "radix-ui": "^1.8.1",
     "react": "^19.3.1",
