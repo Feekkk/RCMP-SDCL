@@ -7,7 +7,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import StickerArt from '../landing/StickerArt.jsx'
+import { ErrorNote } from './StudentUI.jsx'
 
 // Shown on a student's first use, before they can do anything else
 // (CLAUDE.md: log the first time they agree, no versioning needed). Cannot
@@ -40,28 +41,27 @@ export default function ConsentModal({ open, onAgreed }) {
     <Dialog open={open}>
       <DialogContent
         showCloseButton={false}
-        className="sm:max-w-lg"
+        className="st-dialog sm:max-w-lg"
         onEscapeKeyDown={(e) => e.preventDefault()}
-        onInteractionOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
       >
-        <DialogHeader>
-          <div className="flex items-center justify-center gap-4">
-            <img src="/unikl-official.png" alt="UniKL" className="h-10 w-auto" />
-            <div className="h-8 w-px bg-border" />
-            <img src="/sdcl-logo.png" alt="SDCL" className="h-10 w-auto" />
-          </div>
-          <DialogTitle className="mt-2 text-center">Welcome to SDCL Student Portal </DialogTitle>
-          <DialogDescription className="text-center">
+        <DialogHeader className="st-dialog-head">
+          <span className="sticker-art st-dialog-sticker">
+            <StickerArt name="grad-cap" />
+          </span>
+          <p className="mg-script st-kicker">selamat datang!</p>
+          <DialogTitle className="mg-display st-dialog-title">Welcome to SDCL OnePortal</DialogTitle>
+          <DialogDescription className="st-dialog-desc">
             Before we get started, here&apos;s how we take care of your information.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="max-h-56 overflow-y-auto rounded-lg border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+        <div className="st-dialog-body">
           <p>
             To help with your welfare, medical, parking, or food coupon requests, SDCL needs a few
             details from you like your program, phone number, and bank account.
           </p>
-          <ul className="mt-2 list-disc space-y-1 pl-4">
+          <ul>
             <li>
               Your <strong>phone number, bank account, and any dependants&apos; IC numbers</strong>{' '}
               are kept safe and private, and we only use them to help with your requests.
@@ -73,22 +73,17 @@ export default function ConsentModal({ open, onAgreed }) {
           </ul>
         </div>
 
-        <label className="flex items-start gap-2 text-sm text-foreground">
-          <input
-            type="checkbox"
-            className="mt-0.5 size-4 accent-primary"
-            checked={checked}
-            onChange={(e) => setChecked(e.target.checked)}
-          />
+        <label className="st-check">
+          <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} />
           I understand and agree to the terms.
         </label>
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && <ErrorNote>{error}</ErrorNote>}
 
         <DialogFooter>
-          <Button disabled={!checked || submitting} onClick={handleAgree}>
+          <button type="button" className="pill pill-orange" disabled={!checked || submitting} onClick={handleAgree}>
             {submitting ? 'Just a sec…' : "Let's go"}
-          </Button>
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -198,7 +198,7 @@ studentsRouter.get('/categories', async (req, res) => {
 studentsRouter.get('/me/applications', async (req, res) => {
   const [rows] = await pool.query(
     `SELECT a.id, a.application_no, a.module, a.status, a.reason, a.submitted_at, a.decided_at,
-            c.name AS category_name
+            c.code AS category_code, c.name AS category_name
        FROM applications a
        JOIN categories c ON c.id = a.category_id
       WHERE a.student_id = ?
@@ -211,6 +211,7 @@ studentsRouter.get('/me/applications', async (req, res) => {
       id: row.id,
       applicationNo: row.application_no,
       module: row.module,
+      categoryCode: row.category_code,
       categoryName: row.category_name,
       status: row.status,
       reason: row.reason,

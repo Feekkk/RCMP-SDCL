@@ -20,6 +20,12 @@ import MyApplications from './student/MyApplications.jsx'
 import ApplyWelfare from './student/ApplyWelfare.jsx'
 import ApplyMedical from './student/ApplyMedical.jsx'
 
+// Dashboard fund cards open the wizard with ?category=<code> so it starts with
+// that fund already picked.
+const applySearch = (search) => ({
+  category: typeof search.category === 'string' ? search.category : undefined,
+})
+
 const rootRoute = createRootRoute({
   component: () => (
     <>
@@ -134,12 +140,14 @@ const studentApplicationsRoute = createRoute({
 const studentWelfareApplyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/student/welfare/apply',
+  validateSearch: applySearch,
   component: ApplyWelfare,
 })
 
 const studentMedicalApplyRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/student/medical/apply',
+  validateSearch: applySearch,
   component: ApplyMedical,
 })
 

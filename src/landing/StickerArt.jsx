@@ -166,6 +166,90 @@ function TehTarik() {
   )
 }
 
+function Glasses() {
+  return (
+    <svg viewBox="0 0 150 84" aria-hidden="true">
+      <path d="M17 36 5 22M133 36l12-14" stroke={INK} strokeWidth="5" strokeLinecap="round" />
+      <circle cx="42" cy="46" r="27" fill="#C9E8FF" stroke={INK} strokeWidth="6" />
+      <circle cx="108" cy="46" r="27" fill="#C9E8FF" stroke={INK} strokeWidth="6" />
+      <path d="M69 42q6-8 12 0" fill="none" stroke={INK} strokeWidth="5" strokeLinecap="round" />
+      <path d="M28 38q6-9 17-7M94 38q6-9 17-7" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function Lily() {
+  return (
+    <svg viewBox="0 0 110 142" aria-hidden="true">
+      <path d="M55 70q-4 34 2 64" fill="none" stroke="#2F8F4E" strokeWidth="6" strokeLinecap="round" />
+      <path d="M57 112q24-22 36-8-14 16-36 8Z" fill="#3FAE5A" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
+      {[0, 72, 144, 216, 288].map((angle) => (
+        <ellipse
+          key={angle}
+          cx="55"
+          cy="27"
+          rx="13"
+          ry="21"
+          transform={`rotate(${angle} 55 48)`}
+          fill="#fff"
+          stroke={INK}
+          strokeWidth="3.5"
+        />
+      ))}
+      <circle cx="55" cy="48" r="9" fill="#F4C430" stroke={INK} strokeWidth="3" />
+    </svg>
+  )
+}
+
+function Bus() {
+  return (
+    <svg viewBox="0 0 152 100" aria-hidden="true">
+      <rect x="10" y="12" width="132" height="66" rx="14" fill="#4FB3E8" stroke={INK} strokeWidth="4" />
+      <path d="M12 58h128" stroke="#FFE58A" strokeWidth="7" />
+      {[20, 46, 72, 98].map((x) => (
+        <rect key={x} x={x} y="22" width="22" height="24" rx="4" fill="#C9E8FF" stroke={INK} strokeWidth="3" />
+      ))}
+      <rect x="124" y="22" width="10" height="24" rx="3" fill="#C9E8FF" stroke={INK} strokeWidth="3" />
+      <circle cx="136" cy="68" r="3.5" fill="#FFE58A" stroke={INK} strokeWidth="2" />
+      <circle cx="40" cy="80" r="12" fill={INK} />
+      <circle cx="40" cy="80" r="4.5" fill="#D9DCF5" />
+      <circle cx="112" cy="80" r="12" fill={INK} />
+      <circle cx="112" cy="80" r="4.5" fill="#D9DCF5" />
+    </svg>
+  )
+}
+
+function Storm() {
+  return (
+    <svg viewBox="0 0 130 124" aria-hidden="true">
+      <path
+        d="M34 74q-22 0-22-19t21-19q4-26 31-26 21 0 29 19 4-2 10-2 21 0 21 23t-23 24Z"
+        fill="#D9DCF5"
+        stroke={INK}
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+      <path d="M68 70 55 94h13l-8 24 24-32H70l8-16Z" fill="#F4C430" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
+      <path d="M36 86l-5 11M100 86l-5 11M90 102l-5 11" stroke="#4FB3E8" strokeWidth="5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function Bubble() {
+  return (
+    <svg viewBox="0 0 122 110" aria-hidden="true">
+      <path
+        d="M14 20q0-10 10-10h74q10 0 10 10v46q0 10-10 10H54L30 98V76h-6q-10 0-10-10Z"
+        fill="#fff"
+        stroke={INK}
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+      <text x="61" y="62" textAnchor="middle" fontFamily="'Bowlby One', sans-serif" fontSize="40" fill="#F7941D">?</text>
+    </svg>
+  )
+}
+
 const ART = {
   laptop: Laptop,
   cash: Cash,
@@ -176,6 +260,11 @@ const ART = {
   'grad-cap': GradCap,
   coupon: Coupon,
   'teh-tarik': TehTarik,
+  glasses: Glasses,
+  lily: Lily,
+  bus: Bus,
+  storm: Storm,
+  bubble: Bubble,
 }
 
 export default function StickerArt({ name }) {

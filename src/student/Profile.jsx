@@ -1,24 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
-import {
-  ArrowLeft,
-  CheckCircle2,
-  AlertCircle,
-  ShieldCheck,
-  Plus,
-  Trash2,
-  IdCard,
-  GraduationCap,
-  Phone,
-  Users,
-} from 'lucide-react'
-import NavBar from './NavBar.jsx'
+import { Link } from '@tanstack/react-router'
+import { CheckCircle2, AlertCircle, ShieldCheck, Plus, Trash2, IdCard, GraduationCap, Phone, Users, ArrowRight } from 'lucide-react'
+import StudentShell from './StudentShell.jsx'
+import { StudentLoading, ErrorNote, formatDate } from './StudentUI.jsx'
 import { DEPENDANT_STATUSES, ageFromIc, emptyDependant } from './dependants.js'
+import StickerArt from '../landing/StickerArt.jsx'
 import { useRoleGuard } from '@/lib/useRoleGuard'
-import { logout } from '@/lib/useAuth'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -67,7 +54,6 @@ const initials = (name) =>
 // Profile is completed before any application can be submitted (CLAUDE.md).
 // Student ID, name, and email come from the SSO session and are read-only here.
 export default function StudentProfile() {
-  const navigate = useNavigate()
   const { user, ready } = useRoleGuard(['STUDENT'])
   const [profile, setProfile] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
@@ -105,11 +91,6 @@ export default function StudentProfile() {
       .then((data) => setDependants(data.length ? data : []))
       .catch(() => setDependantsError('Could not load your dependants. Please try again.'))
   }, [ready])
-
-  const handleLogout = async () => {
-    await logout()
-    navigate({ to: '/login' })
-  }
 
   const handleChange = (field) => (event) => {
     setSaved(false)
@@ -180,10 +161,9 @@ export default function StudentProfile() {
     }
   }
 
+
   if (!ready || (!profile && !loadError)) {
-    return (
-      <div className="flex h-screen items-center justify-center text-muted-foreground">Loading…</div>
-    )
+    return <StudentLoading />
   }
 
   const completionFields = profile
@@ -199,363 +179,335 @@ export default function StudentProfile() {
   const profileComplete = completionTotal > 0 && completionCount === completionTotal
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <NavBar user={user} onLogout={handleLogout} />
+    <StudentShell user={user}>
+      {loadError && <ErrorNote>{loadError}</ErrorNote>}
 
-      <main className="flex-1 px-8 py-10">
-        <div className="mx-auto max-w-5xl">
-
-          {loadError && (
-            <div className="mt-6 flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-              <AlertCircle className="size-4 shrink-0" />
-              {loadError}
+      {profile && (
+        <>
+          <section className="st-page-banner st-profile-banner st-tone-mint">
+            <span className="st-profile-avatar">{initials(profile.name)}</span>
+            <div className="st-profile-id">
+              <p className="mg-script st-kicker">this is you</p>
+              <h1 className="mg-display st-page-title">{profile.name ?? 'My profile'}</h1>
+              <p>
+                Student ID {profile.studentId} · {profile.email}
+              </p>
             </div>
-          )}
+            <div className="st-profile-progress">
+              <span className={`st-status st-tone-${profileComplete ? 'aqua' : 'butter'}`}>
+                {profileComplete ? <CheckCircle2 /> : <AlertCircle />}
+                {profileComplete ? 'Profile complete' : `${completionCount}/${completionTotal} sections complete`}
+              </span>
+              <div className="st-meter">
+                <span style={{ width: `${completionTotal ? (completionCount / completionTotal) * 100 : 0}%` }} />
+              </div>
+              {profileComplete && (
+                <Link to="/student" hash="funds" className="pill pill-orange pill-sm">
+                  Browse funds
+                  <ArrowRight />
+                </Link>
+              )}
+            </div>
+          </section>
 
-          {profile && (
-            <>
-              <div className="mt-6 flex flex-col gap-5 rounded-2xl border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/5 text-xl font-semibold text-primary ring-4 ring-primary/5">
-                    {initials(profile.name)}
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-semibold text-foreground">{profile.name ?? 'My Profile'}</h1>
-                    <p className="mt-0.5 text-sm text-muted-foreground">
-                      Student ID {profile.studentId} · {profile.email}
-                    </p>
-                  </div>
+          <form className="st-profile-grid" onSubmit={handleSave}>
+            <section className="st-panel st-profile-account">
+              <SectionHeader icon={IdCard} tone="lilac" title="Account" description="Provided by your Microsoft account." />
+              <dl className="st-readonly st-readonly-stack">
+                <div className="st-readonly-item">
+                  <dt>Student ID</dt>
+                  <dd>{profile.studentId}</dd>
                 </div>
+                <div className="st-readonly-item">
+                  <dt>Name</dt>
+                  <dd>{profile.name ?? '—'}</dd>
+                </div>
+                <div className="st-readonly-item">
+                  <dt>Microsoft SSO email</dt>
+                  <dd>{profile.email}</dd>
+                </div>
+                <div className="st-readonly-item">
+                  <dt>Consent</dt>
+                  <dd className="st-consent">
+                    {profile.consentAt ? (
+                      <>
+                        <CheckCircle2 />
+                        Agreed on {formatDate(profile.consentAt)}
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle />
+                        Not yet agreed
+                      </>
+                    )}
+                  </dd>
+                </div>
+              </dl>
+            </section>
 
-                <div className="flex shrink-0 flex-col gap-1.5 sm:items-end">
-                  <span
-                    className={`inline-flex items-center gap-1.5 self-start rounded-full px-3 py-1 text-xs font-semibold sm:self-end ${
-                      profileComplete
-                        ? 'bg-emerald-500/10 text-emerald-600'
-                        : 'bg-amber-500/10 text-amber-600'
-                    }`}
+            <section className="st-panel st-profile-study">
+              <SectionHeader icon={GraduationCap} tone="sky" title="Study details" description="Your current programme and semester." />
+              <div className="st-field-grid">
+                <div className="st-field">
+                  <label className="st-label" htmlFor="program">
+                    Programme
+                  </label>
+                  <Select
+                    value={programIsOther ? 'Other' : form.program}
+                    onValueChange={(value) => {
+                      setSaved(false)
+                      setProgramIsOther(value === 'Other')
+                      setForm((f) => ({ ...f, program: value === 'Other' ? '' : value }))
+                    }}
                   >
-                    {profileComplete ? <CheckCircle2 className="size-3.5" /> : <AlertCircle className="size-3.5" />}
-                    {profileComplete ? 'Profile complete' : `${completionCount}/${completionTotal} sections complete`}
-                  </span>
-                  <div className="h-1.5 w-40 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full rounded-full bg-primary transition-all"
-                      style={{ width: `${completionTotal ? (completionCount / completionTotal) * 100 : 0}%` }}
+                    <SelectTrigger id="program" className="st-input st-select">
+                      <SelectValue placeholder="Choose your programme" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROGRAMS.map((p) => (
+                        <SelectItem key={p} value={p}>
+                          {p}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {programIsOther && (
+                    <input
+                      className="st-input"
+                      placeholder="Enter your programme"
+                      value={form.program}
+                      onChange={handleChange('program')}
+                      required
                     />
-                  </div>
+                  )}
+                </div>
+                <div className="st-field">
+                  <label className="st-label" htmlFor="currentSemester">
+                    Current semester
+                  </label>
+                  <input
+                    id="currentSemester"
+                    className="st-input"
+                    placeholder="e.g. 3"
+                    value={form.currentSemester}
+                    onChange={handleChange('currentSemester')}
+                    required
+                  />
                 </div>
               </div>
+            </section>
 
-              <form className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-12" onSubmit={handleSave}>
-                <section className="rounded-2xl border border-border bg-card p-6 md:col-span-5">
-                  <SectionHeader
-                    icon={IdCard}
-                    title="Account"
-                    description="Your basic information is provided by the Microsoft."
+            <section className="st-panel st-profile-contact">
+              <div className="st-label-row">
+                <SectionHeader
+                  icon={Phone}
+                  tone="peach"
+                  title="Contact & banking"
+                  description="Used for application updates and reimbursements."
+                />
+                <span className="st-chip">
+                  <ShieldCheck />
+                  Kept private
+                </span>
+              </div>
+
+              <div className="st-field-grid st-field-grid-3">
+                <div className="st-field">
+                  <label className="st-label" htmlFor="contactNumber">
+                    Phone number
+                  </label>
+                  <input
+                    id="contactNumber"
+                    className="st-input"
+                    type="tel"
+                    value={form.contactNumber}
+                    onChange={handleChange('contactNumber')}
+                    required
                   />
-                  <dl className="mt-5 grid grid-cols-1 gap-4 rounded-xl bg-muted/30 p-4">
-                    <div>
-                      <dt className="text-xs text-muted-foreground">Student ID</dt>
-                      <dd className="mt-0.5 text-sm font-medium text-foreground">{profile.studentId}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs text-muted-foreground">Name</dt>
-                      <dd className="mt-0.5 text-sm font-medium text-foreground">{profile.name ?? '—'}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs text-muted-foreground">Microsoft SSO email</dt>
-                      <dd className="mt-0.5 truncate text-sm font-medium text-foreground">{profile.email}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs text-muted-foreground">Consent</dt>
-                      <dd className="mt-0.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                        {profile.consentAt ? (
-                          <>
-                            <CheckCircle2 className="size-3.5 shrink-0 text-emerald-600" />
-                            Agreed on{' '}
-                            {new Date(profile.consentAt).toLocaleDateString(undefined, {
-                              year: 'numeric',
-                              month: 'short',
-                              day: 'numeric',
-                            })}
-                          </>
-                        ) : (
-                          <>
-                            <AlertCircle className="size-3.5 shrink-0 text-amber-600" />
-                            Not yet agreed
-                          </>
-                        )}
-                      </dd>
-                    </div>
-                  </dl>
-                </section>
-
-                <section className="rounded-2xl border border-border bg-card p-6 md:col-span-7">
-                  <SectionHeader icon={GraduationCap} title="Study Details" description="Update your academic information." />
-                  <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="program">Programme</Label>
-                      <Select
-                        value={programIsOther ? 'Other' : form.program}
-                        onValueChange={(value) => {
-                          setSaved(false)
-                          setProgramIsOther(value === 'Other')
-                          setForm((f) => ({ ...f, program: value === 'Other' ? '' : value }))
-                        }}
-                      >
-                        <SelectTrigger id="program" className="w-full">
-                          <SelectValue placeholder="Choose your programme" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {PROGRAMS.map((p) => (
-                            <SelectItem key={p} value={p}>
-                              {p}
-                            </SelectItem>
-                          ))}
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {programIsOther && (
-                        <Input
-                          className="mt-2"
-                          placeholder="Enter your programme"
-                          value={form.program}
-                          onChange={handleChange('program')}
-                          required
-                        />
-                      )}
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="currentSemester" placeholder="Current semester">
-                        Current semester
-                      </Label>
-                      <Input
-                        id="currentSemester"
-                        value={form.currentSemester}
-                        onChange={handleChange('currentSemester')}
-                        required
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <section className="rounded-2xl border border-border bg-card p-6 md:col-span-12">
-                  <div className="flex items-start justify-between gap-3">
-                    <SectionHeader
-                      icon={Phone}
-                      title="Contact & Banking"
-                      description="Used for application updates and reimbursements."
-                    />
-                    <span className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
-                      <ShieldCheck className="size-3.5" />
-                      Kept private
-                    </span>
-                  </div>
-
-                  <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="contactNumber">Phone number</Label>
-                      <Input
-                        id="contactNumber"
-                        type="tel"
-                        value={form.contactNumber}
-                        onChange={handleChange('contactNumber')}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="bankName">Bank name</Label>
-                      <Input id="bankName" value={form.bankName} onChange={handleChange('bankName')} required />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="bankNumber">Bank account number</Label>
-                      <Input
-                        id="bankNumber"
-                        value={form.bankNumber}
-                        onChange={handleChange('bankNumber')}
-                        required
-                      />
-                    </div>
-                  </div>
-                </section>
-
-                <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 md:col-span-12">
-                  <Button type="submit" disabled={saving}>
-                    {saving ? 'Saving…' : 'Save profile'}
-                  </Button>
-                  {saved && (
-                    <span className="flex items-center gap-1.5 text-sm text-emerald-600">
-                      <CheckCircle2 className="size-4" />
-                      Saved
-                    </span>
-                  )}
-                  {saveError && (
-                    <span className="flex items-center gap-1.5 text-sm text-destructive">
-                      <AlertCircle className="size-4" />
-                      {saveError}
-                    </span>
-                  )}
                 </div>
-              </form>
+                <div className="st-field">
+                  <label className="st-label" htmlFor="bankName">
+                    Bank name
+                  </label>
+                  <input
+                    id="bankName"
+                    className="st-input"
+                    value={form.bankName}
+                    onChange={handleChange('bankName')}
+                    required
+                  />
+                </div>
+                <div className="st-field">
+                  <label className="st-label" htmlFor="bankNumber">
+                    Bank account number
+                  </label>
+                  <input
+                    id="bankNumber"
+                    className="st-input"
+                    value={form.bankNumber}
+                    onChange={handleChange('bankNumber')}
+                    required
+                  />
+                </div>
+              </div>
+            </section>
 
-              <form className="mt-6" onSubmit={handleSaveDependants}>
-                <section className="rounded-2xl border border-border bg-card p-6">
-                  <div className="flex items-start justify-between gap-3">
-                    <SectionHeader
-                      icon={Users}
-                      title="Dependants"
-                      description="Used to pre-fill the Dependants Form on Welfare applications that need one."
-                    />
-                    <Button type="button" variant="outline" size="sm" onClick={addDependant}>
-                      <Plus className="size-3.5" />
-                      Add dependant
-                    </Button>
-                  </div>
+            <div className="st-save-bar">
+              <button type="submit" className="pill pill-orange" disabled={saving}>
+                {saving ? 'Saving…' : 'Save profile'}
+              </button>
+              {saved && (
+                <span className="st-saved">
+                  <CheckCircle2 />
+                  Saved
+                </span>
+              )}
+              {saveError && <ErrorNote>{saveError}</ErrorNote>}
+            </div>
+          </form>
 
-                  {dependantsError && (
-                    <div className="mt-4 flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-                      <AlertCircle className="size-4 shrink-0" />
-                      {dependantsError}
-                    </div>
-                  )}
+          <form onSubmit={handleSaveDependants}>
+            <section className="st-panel st-dependants">
+              <div className="st-label-row">
+                <SectionHeader
+                  icon={Users}
+                  tone="butter"
+                  title="Dependants"
+                  description="Pre-fills the Dependants Form on Welfare applications that need one."
+                />
+                <button type="button" className="pill pill-white pill-sm" onClick={addDependant}>
+                  <Plus />
+                  Add dependant
+                </button>
+              </div>
 
-                  {dependants.length === 0 ? (
-                    <div className="mt-5 flex flex-col items-center gap-2 rounded-xl border border-dashed border-border py-10 text-center">
-                      <Users className="size-6 text-muted-foreground" />
-                      <p className="text-sm font-medium text-foreground">No dependants added yet</p>
-                      <p className="max-w-xs text-sm text-muted-foreground">
-                        Add one if your application requires a Dependants Form.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="mt-5 flex flex-col gap-4">
-                      {dependants.map((dependant, index) => {
-                        const age = ageFromIc(dependant.icNumber)
-                        const showIncome =
-                          dependant.status === 'Employed' || dependant.status === 'Self-Employed'
-                        return (
-                          <div
-                            key={dependant.id ?? index}
-                            className="space-y-4 rounded-xl border border-border bg-muted/20 p-4"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="inline-flex items-center gap-1.5 rounded-full bg-background px-2.5 py-1 text-xs font-semibold text-foreground">
-                                Dependant {index + 1}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={() => removeDependant(index)}
-                                className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-destructive"
-                              >
-                                <Trash2 className="size-3.5" />
-                                Remove
-                              </button>
-                            </div>
+              {dependantsError && <ErrorNote>{dependantsError}</ErrorNote>}
 
-                            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:flex lg:flex-nowrap lg:items-start">
-                              <div className="space-y-1.5 lg:min-w-0 lg:flex-1">
-                                <Label className="text-xs font-normal text-muted-foreground">Name</Label>
-                                <Input
-                                  value={dependant.name}
-                                  onChange={(event) => updateDependant(index, 'name', event.target.value)}
-                                  required
-                                />
-                              </div>
-                              <div className="space-y-1.5 lg:min-w-0 lg:flex-1">
-                                <Label className="text-xs font-normal text-muted-foreground">
-                                  Identity Card Number
-                                </Label>
-                                <Input
-                                  value={dependant.icNumber}
-                                  onChange={(event) => updateDependant(index, 'icNumber', event.target.value)}
-                                  placeholder="YYMMDD-PB-XXXX"
-                                  required
-                                />
-                              </div>
-                              <div className="space-y-1.5 lg:min-w-0 lg:flex-1">
-                                <Label className="text-xs font-normal text-muted-foreground">Relationship</Label>
-                                <Input
-                                  value={dependant.relationship}
-                                  onChange={(event) => updateDependant(index, 'relationship', event.target.value)}
-                                  required
-                                />
-                              </div>
-                              <div className="space-y-1.5 lg:w-24 lg:shrink-0">
-                                <Label className="text-xs font-normal text-muted-foreground">
-                                  Age
-                                </Label>
-                                <Input value={age} disabled placeholder="—" />
-                              </div>
-                              <div className="space-y-1.5 lg:min-w-0 lg:flex-1">
-                                <Label className="text-xs font-normal text-muted-foreground">Status</Label>
-                                <Select
-                                  value={dependant.status}
-                                  onValueChange={(value) => updateDependant(index, 'status', value)}
-                                >
-                                  <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Choose status" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {DEPENDANT_STATUSES.map((status) => (
-                                      <SelectItem key={status} value={status}>
-                                        {status}
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              {showIncome && (
-                                <div className="space-y-1.5 lg:min-w-0 lg:flex-1">
-                                  <Label className="text-xs font-normal text-muted-foreground">Income</Label>
-                                  <Input
-                                    type="number"
-                                    min="0"
-                                    step="0.01"
-                                    value={dependant.income ?? ''}
-                                    onChange={(event) => updateDependant(index, 'income', event.target.value)}
-                                    placeholder="RM"
-                                    required
-                                  />
-                                </div>
-                              )}
-                            </div>
+              {dependants.length === 0 ? (
+                <div className="st-empty st-empty-inline">
+                  <span className="sticker-art st-empty-sticker">
+                    <StickerArt name="lily" />
+                  </span>
+                  <p className="mg-script st-empty-note">no dependants added yet</p>
+                  <p>Add one if your application requires a Dependants Form.</p>
+                </div>
+              ) : (
+                <div className="st-dependant-list">
+                  {dependants.map((dependant, index) => {
+                    const age = ageFromIc(dependant.icNumber)
+                    const showIncome = dependant.status === 'Employed' || dependant.status === 'Self-Employed'
+                    return (
+                      <div key={dependant.id ?? index} className="st-dependant">
+                        <div className="st-label-row">
+                          <span className="st-chip st-chip-strong">Dependant {index + 1}</span>
+                          <button type="button" className="st-remove" onClick={() => removeDependant(index)}>
+                            <Trash2 />
+                            Remove
+                          </button>
+                        </div>
+
+                        <div className="st-dependant-fields">
+                          <div className="st-field">
+                            <label className="st-sublabel">Name</label>
+                            <input
+                              className="st-input"
+                              value={dependant.name}
+                              onChange={(event) => updateDependant(index, 'name', event.target.value)}
+                              required
+                            />
                           </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </section>
-
-                <div className="mt-5 flex items-center gap-3 rounded-2xl border border-border bg-card p-4">
-                  <Button type="submit" disabled={dependantsSaving}>
-                    {dependantsSaving ? 'Saving…' : 'Save dependants'}
-                  </Button>
-                  {dependantsSaved && (
-                    <span className="flex items-center gap-1.5 text-sm text-emerald-600">
-                      <CheckCircle2 className="size-4" />
-                      Saved
-                    </span>
-                  )}
+                          <div className="st-field">
+                            <label className="st-sublabel">Identity card number</label>
+                            <input
+                              className="st-input"
+                              value={dependant.icNumber}
+                              onChange={(event) => updateDependant(index, 'icNumber', event.target.value)}
+                              placeholder="YYMMDD-PB-XXXX"
+                              required
+                            />
+                          </div>
+                          <div className="st-field">
+                            <label className="st-sublabel">Relationship</label>
+                            <input
+                              className="st-input"
+                              value={dependant.relationship}
+                              onChange={(event) => updateDependant(index, 'relationship', event.target.value)}
+                              required
+                            />
+                          </div>
+                          <div className="st-field st-field-age">
+                            <label className="st-sublabel">Age</label>
+                            <input className="st-input" value={age} disabled placeholder="—" />
+                          </div>
+                          <div className="st-field">
+                            <label className="st-sublabel">Status</label>
+                            <Select
+                              value={dependant.status}
+                              onValueChange={(value) => updateDependant(index, 'status', value)}
+                            >
+                              <SelectTrigger className="st-input st-select">
+                                <SelectValue placeholder="Choose status" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {DEPENDANT_STATUSES.map((status) => (
+                                  <SelectItem key={status} value={status}>
+                                    {status}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          {showIncome && (
+                            <div className="st-field">
+                              <label className="st-sublabel">Income (RM)</label>
+                              <input
+                                className="st-input"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value={dependant.income ?? ''}
+                                onChange={(event) => updateDependant(index, 'income', event.target.value)}
+                                placeholder="RM"
+                                required
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
-              </form>
-            </>
-          )}
-        </div>
-      </main>
-    </div>
+              )}
+            </section>
+
+            <div className="st-save-bar">
+              <button type="submit" className="pill pill-orange" disabled={dependantsSaving}>
+                {dependantsSaving ? 'Saving…' : 'Save dependants'}
+              </button>
+              {dependantsSaved && (
+                <span className="st-saved">
+                  <CheckCircle2 />
+                  Saved
+                </span>
+              )}
+            </div>
+          </form>
+        </>
+      )}
+    </StudentShell>
   )
 }
 
-function SectionHeader({ icon: Icon, title, description }) {
+function SectionHeader({ icon: Icon, tone, title, description }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-        <Icon className="size-4.5" />
-      </div>
+    <div className="st-section-header">
+      <span className={`st-section-icon st-tone-${tone}`}>
+        <Icon />
+      </span>
       <div>
-        <h2 className="text-sm font-semibold text-foreground">{title}</h2>
-        {description && <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>}
+        <h2 className="mg-display">{title}</h2>
+        {description && <p>{description}</p>}
       </div>
     </div>
   )

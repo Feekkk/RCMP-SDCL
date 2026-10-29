@@ -1,26 +1,42 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
-import {
-  ArrowLeft,
-  Inbox,
-  AlertCircle,
-  ClipboardList,
-  HandCoins,
-  Stethoscope,
-} from 'lucide-react'
-import NavBar from './NavBar.jsx'
-import { STATUS } from './applicationStatus.js'
+import { Link } from '@tanstack/react-router'
+import { motion } from 'motion/react'
+import { ArrowRight } from 'lucide-react'
+import StudentShell from './StudentShell.jsx'
+import { StudentLoading, StatusPill, ErrorNote, formatDate } from './StudentUI.jsx'
+import { fundLook } from './funds.js'
+import { isInReview } from './applicationStatus.js'
+import StickerArt from '../landing/StickerArt.jsx'
 import { useRoleGuard } from '@/lib/useRoleGuard'
-import { logout } from '@/lib/useAuth'
 
 const MODULE_LABEL = { WELFARE: 'Student Welfare', MEDICAL: 'Medical Outpatient' }
-const MODULE_ICON = { WELFARE: HandCoins, MEDICAL: Stethoscope }
+
+const FILTERS = [
+  { key: 'all', label: 'All', tone: 'white', match: () => true },
+  { key: 'review', label: 'In review', tone: 'butter', match: (a) => isInReview(a.status) },
+  { key: 'approved', label: 'Approved', tone: 'mint', match: (a) => a.status === 'APPROVED' },
+  { key: 'rejected', label: 'Rejected', tone: 'pink', match: (a) => a.status === 'REJECTED' },
+]
+
+// Approval flows from CLAUDE.md: Welfare goes through an SD staff
+// recommendation before the Board decides; Medical goes straight to the board.
+const TRACKS = {
+  WELFARE: ['Submitted', 'SD recommended', 'Board decision'],
+  MEDICAL: ['Submitted', 'Board decision'],
+}
+
+function trackPosition(app) {
+  const steps = TRACKS[app.module] ?? TRACKS.MEDICAL
+  if (app.status === 'APPROVED' || app.status === 'REJECTED') return steps.length - 1
+  if (app.status === 'RECOMMENDED') return 1
+  return 0
+}
 
 export default function MyApplications() {
-  const navigate = useNavigate()
   const { user, ready } = useRoleGuard(['STUDENT'])
   const [applications, setApplications] = useState(null)
   const [loadError, setLoadError] = useState('')
+  const [filter, setFilter] = useState('all')
 
   useEffect(() => {
     if (!ready) return
@@ -30,136 +46,123 @@ export default function MyApplications() {
       .catch(() => setLoadError('Could not load your applications. Please try again.'))
   }, [ready])
 
-  const handleLogout = async () => {
-    await logout()
-    navigate({ to: '/login' })
-  }
-
   if (!ready || (!applications && !loadError)) {
-    return (
-      <div className="flex h-screen items-center justify-center text-muted-foreground">Loading…</div>
-    )
+    return <StudentLoading />
   }
 
-  const counts = {
-    total: applications?.length ?? 0,
-    pending: applications?.filter((a) => a.status === 'PENDING' || a.status === 'RECOMMENDED').length ?? 0,
-    approved: applications?.filter((a) => a.status === 'APPROVED').length ?? 0,
-    rejected: applications?.filter((a) => a.status === 'REJECTED').length ?? 0,
-  }
+  const activeFilter = FILTERS.find((f) => f.key === filter) ?? FILTERS[0]
+  const visible = (applications ?? []).filter(activeFilter.match)
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <NavBar user={user} onLogout={handleLogout} />
-
-      <main className="flex-1 px-8 py-10">
-        <div className="mx-auto max-w-5xl">
-          <div className="mt-4 flex items-center gap-3.5">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <ClipboardList className="size-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">My applications</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">
-                Track the status of everything you&apos;ve submitted to SDCL.
-              </p>
-            </div>
-          </div>
-
-          {loadError && (
-            <div className="mt-6 flex items-center gap-2 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-              <AlertCircle className="size-4 shrink-0" />
-              {loadError}
-            </div>
-          )}
-
-          {applications && applications.length > 0 && (
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <StatTile label="Total" value={counts.total} className="bg-primary/10 text-primary" />
-              <StatTile label="Pending" value={counts.pending} className="bg-amber-500/10 text-amber-600" />
-              <StatTile label="Approved" value={counts.approved} className="bg-emerald-500/10 text-emerald-600" />
-              <StatTile label="Rejected" value={counts.rejected} className="bg-destructive/10 text-destructive" />
-            </div>
-          )}
-
-          {applications && (
-            applications.length > 0 ? (
-              <div className="mt-6 overflow-x-auto rounded-2xl border border-border bg-card">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-border text-xs text-muted-foreground">
-                      <th className="px-5 py-3 font-medium">Application No.</th>
-                      <th className="px-5 py-3 font-medium">Module</th>
-                      <th className="px-5 py-3 font-medium">Category</th>
-                      <th className="px-5 py-3 font-medium">Status</th>
-                      <th className="px-5 py-3 font-medium">Submitted</th>
-                      <th className="px-5 py-3 font-medium">Decided</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border">
-                    {applications.map((app) => {
-                      const status = STATUS[app.status] ?? STATUS.PENDING
-                      const StatusIcon = status.icon
-                      const ModuleIcon = MODULE_ICON[app.module] ?? ClipboardList
-                      return (
-                        <tr key={app.id}>
-                          <td className="px-5 py-3.5 font-mono text-xs font-medium text-foreground">
-                            {app.applicationNo}
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <div className="flex items-center gap-2.5">
-                              <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                <ModuleIcon className="size-4" />
-                              </div>
-                              <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                {MODULE_LABEL[app.module] ?? app.module}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-5 py-3.5 font-semibold text-foreground">{app.categoryName}</td>
-                          <td className="px-5 py-3.5">
-                            <span
-                              className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${status.className}`}
-                            >
-                              <StatusIcon className="size-3.5" />
-                              {status.label}
-                            </span>
-                          </td>
-                          <td className="px-5 py-3.5 text-muted-foreground">
-                            {new Date(app.submittedAt).toLocaleDateString()}
-                          </td>
-                          <td className="px-5 py-3.5 text-muted-foreground">
-                            {app.decidedAt ? new Date(app.decidedAt).toLocaleDateString() : '—'}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className="mt-8 flex flex-col items-center gap-2 rounded-2xl border border-dashed border-border py-16 text-center">
-                <Inbox className="size-6 text-muted-foreground" />
-                <p className="text-sm font-medium text-foreground">Nothing here yet</p>
-                <p className="max-w-xs text-sm text-muted-foreground">
-                  Once you submit an application, you&apos;ll be able to see and track it right here.
-                </p>
-              </div>
-            )
-          )}
+    <StudentShell user={user}>
+      <section className="st-page-banner st-tone-pink">
+        <span className="sticker-art st-page-banner-sticker">
+          <StickerArt name="coupon" />
+        </span>
+        <div>
+          <p className="mg-script st-kicker">track everything you&rsquo;ve sent</p>
+          <h1 className="mg-display st-page-title">My applications</h1>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {loadError && <ErrorNote>{loadError}</ErrorNote>}
+
+      {applications &&
+        (applications.length === 0 ? (
+          <section className="st-panel st-empty">
+            <span className="sticker-art st-empty-sticker">
+              <StickerArt name="bubble" />
+            </span>
+            <h2 className="mg-display st-h2">Nothing here yet</h2>
+            <p>Once you submit an application, you&apos;ll be able to track it right here.</p>
+            <Link to="/student" hash="funds" className="pill pill-orange">
+              Browse funds
+              <ArrowRight />
+            </Link>
+          </section>
+        ) : (
+          <>
+            <div className="st-filters" role="tablist" aria-label="Filter applications">
+              {FILTERS.map((f) => (
+                <button
+                  key={f.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={filter === f.key}
+                  className={`pill pill-sm st-filter st-tone-${f.tone} ${filter === f.key ? 'pill-active' : ''}`}
+                  onClick={() => setFilter(f.key)}
+                >
+                  {f.label}
+                  <span className="st-filter-count">{applications.filter(f.match).length}</span>
+                </button>
+              ))}
+            </div>
+
+            {visible.length === 0 ? (
+              <p className="mg-script st-empty-note">no applications here right now</p>
+            ) : (
+              <div className="st-app-list">
+                {visible.map((app, index) => (
+                  <motion.article
+                    key={app.id}
+                    className="st-app"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 160, damping: 20, delay: Math.min(index, 6) * 0.05 }}
+                  >
+                    <span className="sticker-art st-app-sticker">
+                      <StickerArt name={fundLook(app.categoryCode).sticker} />
+                    </span>
+
+                    <div className="st-app-main">
+                      <span className="st-mono">{app.applicationNo}</span>
+                      <h3 className="mg-display">{app.categoryName}</h3>
+                      <span className="st-app-module">{MODULE_LABEL[app.module] ?? app.module}</span>
+                    </div>
+
+                    <ApplicationTrack app={app} />
+
+                    <div className="st-app-side">
+                      <StatusPill status={app.status} />
+                      <dl className="st-app-dates">
+                        <div>
+                          <dt>Submitted</dt>
+                          <dd>{formatDate(app.submittedAt)}</dd>
+                        </div>
+                        <div>
+                          <dt>Decided</dt>
+                          <dd>{formatDate(app.decidedAt)}</dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            )}
+          </>
+        ))}
+    </StudentShell>
   )
 }
 
-function StatTile({ label, value, className }) {
+function ApplicationTrack({ app }) {
+  const steps = TRACKS[app.module] ?? TRACKS.MEDICAL
+  const position = trackPosition(app)
+  const decided = app.status === 'APPROVED' || app.status === 'REJECTED'
+
   return (
-    <div className="rounded-2xl border border-border bg-card p-4">
-      <span className={`inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs font-semibold ${className}`}>
-        {label}
-      </span>
-      <p className="mt-2 text-2xl font-semibold text-foreground">{value}</p>
-    </div>
+    <ol className="st-track" aria-label="Progress">
+      {steps.map((label, index) => {
+        let state = index < position || (index === position && decided) ? 'done' : 'todo'
+        if (index === position && !decided) state = 'current'
+        if (decided && index === steps.length - 1) state = app.status === 'APPROVED' ? 'approved' : 'rejected'
+        return (
+          <li key={label} className={`st-track-step st-track-${state}`}>
+            <span className="st-track-dot" />
+            <span className="st-track-label">{label}</span>
+          </li>
+        )
+      })}
+    </ol>
   )
 }
