@@ -10,7 +10,7 @@ import StickerArt from './StickerArt.jsx'
 import './LandingPage.css'
 import './Home.css'
 
-const HERO_WORDS = "Our portal is on a mission to lighten students’ mental load".split(' ')
+const HERO_WORDS = "Our portal aims to lighten student's mental load".split(' ')
 const UNDERLINED_FROM = HERO_WORDS.indexOf('mental')
 
 const HERO_STICKERS = [

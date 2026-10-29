@@ -1,7 +1,7 @@
 .login-page {
   min-height: 100svh;
   padding: 10px;
-  background: var(--mg-mint);
+  background: #fff;
   overflow-x: clip;
 }
 
@@ -11,7 +11,7 @@
   padding: 18px 24px 56px;
   display: flex;
   flex-direction: column;
-  background: var(--mg-aqua);
+  background: var(--surface-soft);
 }
 
 .login-stickers {
@@ -77,9 +77,9 @@
   width: 100%;
   padding: 30px 28px 26px;
   background: #fff;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 32px;
-  box-shadow: -4px 8px 0 var(--mg-ink);
+  box-shadow: -2px 4px 0 var(--mg-ink);
 }
 
 .login-card-head {
@@ -103,8 +103,8 @@
   gap: 6px;
   margin-bottom: 22px;
   padding: 5px;
-  background: var(--mg-cream);
-  border: 2.5px solid var(--mg-ink);
+  background: var(--surface-soft);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 999px;
 }
 
@@ -154,7 +154,7 @@
 .login-field input {
   width: 100%;
   padding: 12px 16px;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 16px;
   background: #fff;
   color: var(--mg-ink);
@@ -168,7 +168,7 @@
 
 .login-field input:focus {
   outline: none;
-  box-shadow: -2px 4px 0 var(--orange);
+  box-shadow: -1px 2px 0 var(--orange);
   transform: translateY(-1px);
 }
 
@@ -198,7 +198,7 @@
 }
 
 .login-password-toggle:hover {
-  background: var(--mg-cream);
+  background: var(--surface-soft);
 }
 
 .login-password-toggle svg {
@@ -209,7 +209,7 @@
 .login-error {
   padding: 10px 14px;
   background: var(--mg-pink);
-  border: 2px solid #c0392b;
+  border: 1.5px solid #c0392b;
   border-radius: 14px;
   color: #a12a1e;
   font-size: 0.85rem;

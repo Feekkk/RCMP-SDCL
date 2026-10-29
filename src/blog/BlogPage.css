@@ -13,9 +13,9 @@
   padding: 44px 48px;
   overflow: hidden;
   background: var(--mg-ink);
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 36px;
-  box-shadow: -5px 9px 0 var(--orange);
+  box-shadow: -2px 4px 0 var(--orange);
   color: #fff;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -24,7 +24,7 @@
 .featured-post:hover,
 .featured-post:focus-visible {
   transform: translate(2px, -3px) rotate(-0.4deg);
-  box-shadow: -7px 12px 0 var(--orange);
+  box-shadow: -4px 6px 0 var(--orange);
 }
 
 .featured-post:focus-visible {
@@ -95,7 +95,7 @@
   position: relative;
   display: inline-block;
   padding: 5px 12px;
-  border: 2px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 999px;
   color: var(--mg-ink);
   font-size: 11px;
@@ -126,9 +126,9 @@
 .filter-pill {
   padding: 10px 18px;
   background: #fff;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 999px;
-  box-shadow: -2px 4px 0 var(--mg-ink);
+  box-shadow: -1px 2px 0 var(--mg-ink);
   color: var(--mg-ink);
   font-family: var(--mg-display);
   font-size: 13px;
@@ -140,7 +140,7 @@
 
 .filter-pill:hover {
   transform: translate(1px, -2px);
-  box-shadow: -3px 6px 0 var(--mg-ink);
+  box-shadow: -2px 3px 0 var(--mg-ink);
 }
 
 .filter-pill-active,
@@ -163,9 +163,9 @@
   flex-direction: column;
   overflow: hidden;
   background: #fff;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 28px;
-  box-shadow: -4px 7px 0 var(--mg-ink);
+  box-shadow: -2px 4px 0 var(--mg-ink);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -173,7 +173,7 @@
 .post-card:hover,
 .post-card:focus-visible {
   transform: translate(2px, -4px) rotate(-0.6deg);
-  box-shadow: -6px 11px 0 var(--mg-ink);
+  box-shadow: -3px 6px 0 var(--mg-ink);
 }
 
 .post-card:focus-visible {
@@ -186,7 +186,8 @@
   align-items: center;
   justify-content: center;
   height: 120px;
-  border-bottom: 2.5px solid var(--mg-ink);
+  background: var(--surface-soft);
+  border-bottom: 1.5px solid var(--mg-ink);
   color: var(--mg-ink);
 }
 
@@ -226,7 +227,7 @@
   align-self: stretch;
   margin-top: 8px;
   padding-top: 14px;
-  border-top: 2px dashed rgba(17, 21, 90, 0.2);
+  border-top: 1.5px dashed rgba(17, 21, 90, 0.2);
 }
 
 .post-date {

@@ -240,6 +240,8 @@ html {
 
 :root {
   --mg-ink: var(--navy-900);
+  /* Large areas stay white or near-white; pastels are for accents only. */
+  --surface-soft: #f6f6fa;
   --mg-aqua: #c8f2ff;
   --mg-mint: #b4ecc4;
   --mg-lilac: #ecc8ff;
@@ -261,11 +263,11 @@ html {
   justify-content: center;
   gap: 8px;
   padding: 12px 22px;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 999px;
   background: var(--pill-bg);
   color: var(--mg-ink);
-  box-shadow: -2px 4px 0 var(--pill-shadow, var(--mg-ink));
+  box-shadow: -1px 2px 0 var(--pill-shadow, var(--mg-ink));
   font-family: var(--mg-display);
   font-size: 14px;
   line-height: 1;
@@ -285,7 +287,7 @@ html {
 
 .pill:hover {
   transform: translate(1px, -2px);
-  box-shadow: -3px 6px 0 var(--pill-shadow, var(--mg-ink));
+  box-shadow: -2px 3px 0 var(--pill-shadow, var(--mg-ink));
 }
 
 .pill:active,
@@ -354,7 +356,7 @@ html {
   width: calc(100% - 24px);
   max-width: 1380px;
   padding: 8px 12px 12px;
-  border: 2.5px solid transparent;
+  border: 1.5px solid transparent;
   border-radius: 999px;
   transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
@@ -363,7 +365,7 @@ html {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
   border-color: var(--mg-ink);
-  box-shadow: -3px 5px 0 var(--mg-ink);
+  box-shadow: -2px 2px 0 var(--mg-ink);
 }
 
 .brand {
@@ -372,9 +374,9 @@ html {
   align-items: center;
   padding: 6px 18px;
   background: #fff;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 999px;
-  box-shadow: -2px 4px 0 var(--mg-ink);
+  box-shadow: -1px 2px 0 var(--mg-ink);
   text-decoration: none;
   transition: transform 0.2s ease;
 }
@@ -436,9 +438,9 @@ html {
   gap: 2px;
   padding: 10px;
   background: #fff;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 22px;
-  box-shadow: -3px 6px 0 var(--mg-ink);
+  box-shadow: -2px 3px 0 var(--mg-ink);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px) rotate(-1.5deg);
@@ -509,11 +511,11 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2.5px solid var(--mg-ink);
+  border: 1.5px solid var(--mg-ink);
   border-radius: 50%;
   background: var(--orange);
   color: var(--mg-ink);
-  box-shadow: -2px 4px 0 var(--mg-ink);
+  box-shadow: -1px 2px 0 var(--mg-ink);
   cursor: pointer;
   opacity: 0;
   transform: translateY(16px) scale(0.8);
@@ -637,9 +639,9 @@ html {
     gap: 12px;
     padding: 18px;
     background: #fff;
-    border: 2.5px solid var(--mg-ink);
+    border: 1.5px solid var(--mg-ink);
     border-radius: 28px;
-    box-shadow: -3px 6px 0 var(--mg-ink);
+    box-shadow: -2px 3px 0 var(--mg-ink);
   }
 
   .nav.nav-open {
@@ -649,7 +651,7 @@ html {
   .nav-mobile-link {
     display: block;
     padding: 12px 18px;
-    border: 2.5px dashed rgba(17, 21, 90, 0.25);
+    border: 1.5px dashed rgba(17, 21, 90, 0.25);
     border-radius: 999px;
     color: var(--mg-ink);
     font-family: var(--mg-display);

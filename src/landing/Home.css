@@ -1,7 +1,7 @@
 /* ---------- Home page (playful sticker theme) ---------- */
 
 .mg-home {
-  background: var(--mg-mint);
+  background: #fff;
   overflow-x: clip;
 }
 
@@ -100,7 +100,7 @@
   min-height: calc(100svh - 20px);
   margin-top: 10px;
   padding: 140px 0 110px;
-  background: var(--mg-aqua);
+  background: var(--surface-soft);
 }
 
 .mg-hero-stickers {
@@ -225,7 +225,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 150px 0 120px;
-  background: var(--mg-cream);
+  background: var(--surface-soft);
 }
 
 .mg-stack-stickers {
@@ -287,10 +287,10 @@
   align-items: center;
   gap: 24px;
   padding: 14px 18px 14px 22px;
-  background: var(--row-bg);
-  border: 2.5px solid var(--mg-ink);
+  background: #fff;
+  border: 1.5px solid var(--mg-ink);
   border-radius: 999px;
-  box-shadow: -3px 5px 0 var(--mg-ink);
+  box-shadow: -2px 2px 0 var(--mg-ink);
   color: var(--mg-ink);
   text-align: left;
   text-decoration: none;
@@ -299,7 +299,7 @@
 
 .mg-can-row:hover {
   transform: translate(2px, -3px) rotate(-0.6deg);
-  box-shadow: -6px 9px 0 var(--mg-ink);
+  box-shadow: -3px 4px 0 var(--mg-ink);
 }
 
 .mg-can-row:focus-visible {
@@ -398,17 +398,21 @@
 /* ---------- Inner pages ---------- */
 
 .mg-page {
-  background: var(--mg-cream);
+  background: #fff;
   overflow-x: clip;
 }
 
-.mg-bg-aqua { background: var(--mg-aqua); }
-.mg-bg-lilac { background: var(--mg-lilac); }
-.mg-bg-pink { background: var(--mg-pink); }
-.mg-bg-mint { background: var(--mg-mint); }
-.mg-bg-butter { background: var(--mg-butter); }
-.mg-bg-sky { background: var(--mg-sky); }
-.mg-bg-peach { background: var(--mg-peach); }
+/* Hero panels share one near-white surface; the tone name is kept so pages
+   can still be told apart in markup if colour comes back later. */
+.mg-bg-aqua,
+.mg-bg-lilac,
+.mg-bg-pink,
+.mg-bg-mint,
+.mg-bg-butter,
+.mg-bg-sky,
+.mg-bg-peach {
+  background: var(--surface-soft);
+}
 
 .mg-page-hero {
   padding: 64px 0 76px;
