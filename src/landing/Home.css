@@ -1,0 +1,579 @@
+/* ---------- Home page (playful sticker theme) ---------- */
+
+.mg-home {
+  background: var(--mg-mint);
+  overflow-x: clip;
+}
+
+.mg-home .site-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+
+.mg-display {
+  font-family: var(--mg-display);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  color: var(--mg-ink);
+}
+
+.mg-script {
+  font-family: var(--mg-script);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.mg-panel {
+  position: relative;
+  margin-inline: 10px;
+  border-radius: 44px;
+  overflow: clip;
+}
+
+/* ---------- Stickers ---------- */
+
+.sticker {
+  position: absolute;
+  left: calc(var(--x) - var(--size) / 2);
+  top: calc(var(--y) - var(--size) / 2);
+  width: var(--size);
+  pointer-events: auto;
+}
+
+.sticker-drag {
+  cursor: grab;
+}
+
+.sticker-drag:active {
+  cursor: grabbing;
+}
+
+.sticker-bob {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: sticker-bob 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes sticker-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+/* Stacked offsets dilate the art into a white die-cut edge, then cast a soft shadow. */
+.sticker-art {
+  filter: drop-shadow(3.5px 0 0 #fff) drop-shadow(-3.5px 0 0 #fff) drop-shadow(0 3.5px 0 #fff)
+    drop-shadow(0 -3.5px 0 #fff) drop-shadow(0 10px 10px rgba(17, 21, 90, 0.2));
+}
+
+.sticker-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sticker-label {
+  margin-top: 6px;
+  font-family: var(--mg-script);
+  font-size: 22px;
+  line-height: 1.1;
+  color: var(--mg-ink);
+  white-space: nowrap;
+  transform: rotate(-6deg);
+  user-select: none;
+}
+
+/* ---------- Hero ---------- */
+
+.mg-hero {
+  display: flex;
+  align-items: center;
+  min-height: calc(100svh - 20px);
+  margin-top: 10px;
+  padding: 140px 0 110px;
+  background: var(--mg-aqua);
+}
+
+.mg-hero-stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.mg-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: min(940px, 66vw);
+  text-align: center;
+}
+
+.mg-hero-hello {
+  display: inline-block;
+  font-size: 26px;
+  color: var(--orange-dark);
+}
+
+.mg-hero-title {
+  margin-top: 14px;
+  font-size: clamp(44px, 6.4vw, 104px);
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.mg-word {
+  display: inline-block;
+  margin-inline: 0.11em;
+  padding-bottom: 0.04em;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.mg-word > span {
+  display: inline-block;
+}
+
+.mg-underlined {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.mg-squiggle {
+  position: absolute;
+  left: 3%;
+  bottom: -0.16em;
+  width: 94%;
+  height: 0.24em;
+  overflow: visible;
+}
+
+.mg-hero-sub {
+  max-width: 720px;
+  margin: 44px auto 0;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.1;
+}
+
+.mg-hero-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 44px;
+}
+
+/* ---------- Marquee ---------- */
+
+.mg-marquee {
+  position: relative;
+  z-index: 4;
+  margin: -30px -24px;
+  padding: 18px 0;
+  overflow: hidden;
+  background: var(--mg-ink);
+  color: #fff;
+  transform: rotate(-2deg);
+  box-shadow: 0 8px 0 rgba(17, 21, 90, 0.15);
+}
+
+.mg-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: mg-marquee 36s linear infinite;
+}
+
+.mg-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  padding-right: 28px;
+  font-family: var(--mg-display);
+  font-size: clamp(20px, 2.6vw, 34px);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mg-marquee-item:nth-child(even) {
+  color: var(--mg-aqua);
+}
+
+.mg-marquee-item svg {
+  width: 0.8em;
+  height: 0.8em;
+  color: var(--mg-butter);
+}
+
+@keyframes mg-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- "With SDCL you can" stack ---------- */
+
+.mg-stack {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 150px 0 120px;
+  background: var(--mg-cream);
+}
+
+.mg-stack-stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.mg-stack-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.mg-stack-title {
+  max-width: 1000px;
+  margin: 0 auto;
+  font-size: clamp(36px, 5.6vw, 86px);
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.mg-stack-aside {
+  display: block;
+  margin-top: 22px;
+  font-size: clamp(26px, 3vw, 40px);
+  color: var(--orange-dark);
+  transform: rotate(-4deg);
+}
+
+.mg-can-label {
+  margin-top: 96px;
+  font-size: clamp(18px, 2vw, 24px);
+  letter-spacing: 0.04em;
+}
+
+.mg-can-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 1060px;
+  margin: 30px auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mg-can-list li:nth-child(odd) {
+  margin-right: 5%;
+}
+
+.mg-can-list li:nth-child(even) {
+  margin-left: 5%;
+}
+
+.mg-can-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 18px 14px 22px;
+  background: var(--row-bg);
+  border: 2.5px solid var(--mg-ink);
+  border-radius: 999px;
+  box-shadow: -3px 5px 0 var(--mg-ink);
+  color: var(--mg-ink);
+  text-align: left;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mg-can-row:hover {
+  transform: translate(2px, -3px) rotate(-0.6deg);
+  box-shadow: -6px 9px 0 var(--mg-ink);
+}
+
+.mg-can-row:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 4px;
+}
+
+.mg-tone-lilac { --row-bg: var(--mg-lilac); }
+.mg-tone-pink { --row-bg: var(--mg-pink); }
+.mg-tone-mint { --row-bg: var(--mg-mint); }
+.mg-tone-sky { --row-bg: var(--mg-sky); }
+.mg-tone-peach { --row-bg: var(--mg-peach); }
+
+.mg-can-sticker {
+  width: 88px;
+  transform: rotate(-6deg);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mg-can-row:hover .mg-can-sticker {
+  transform: rotate(-14deg) scale(1.18);
+}
+
+.mg-can-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mg-can-title {
+  font-size: clamp(22px, 3.4vw, 48px);
+  line-height: 0.95;
+}
+
+.mg-can-note {
+  font-size: clamp(16px, 1.6vw, 22px);
+  line-height: 1.2;
+  color: var(--mg-ink);
+}
+
+.mg-soon {
+  display: inline-block;
+  margin-left: 12px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--mg-ink);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+
+.mg-can-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--mg-ink);
+  color: #fff;
+  transition: transform 0.25s ease;
+}
+
+.mg-can-arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mg-can-row:hover .mg-can-arrow {
+  transform: rotate(-45deg);
+}
+
+.mg-stack-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 88px;
+}
+
+.mg-stack-cta p {
+  font-size: 30px;
+  color: var(--orange-dark);
+  transform: rotate(-3deg);
+}
+
+.mg-stack-cta span {
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+/* ---------- Inner pages ---------- */
+
+.mg-page {
+  background: var(--mg-cream);
+  overflow-x: clip;
+}
+
+.mg-bg-aqua { background: var(--mg-aqua); }
+.mg-bg-lilac { background: var(--mg-lilac); }
+.mg-bg-pink { background: var(--mg-pink); }
+.mg-bg-mint { background: var(--mg-mint); }
+.mg-bg-butter { background: var(--mg-butter); }
+.mg-bg-sky { background: var(--mg-sky); }
+.mg-bg-peach { background: var(--mg-peach); }
+
+.mg-page-hero {
+  padding: 64px 0 76px;
+  text-align: center;
+}
+
+.mg-page-hero-stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.mg-page-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: min(820px, 68vw);
+}
+
+.mg-page-hero-back {
+  margin-bottom: 22px;
+}
+
+.mg-page-hero-back svg {
+  transform: rotate(180deg);
+}
+
+.mg-page-hero-kicker {
+  display: block;
+  font-size: 24px;
+  color: var(--orange-dark);
+  transform: rotate(-3deg);
+}
+
+.mg-page-hero-title {
+  margin-top: 10px;
+  font-size: clamp(36px, 5.4vw, 76px);
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.mg-page-hero-sub {
+  max-width: 600px;
+  margin: 24px auto 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--mg-ink);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1320px) {
+  .sticker {
+    width: calc(var(--size) * 0.82);
+    left: calc(var(--x) - var(--size) * 0.41);
+    top: calc(var(--y) - var(--size) * 0.41);
+  }
+
+  .mg-stack-stickers {
+    display: none;
+  }
+}
+
+@media (max-width: 960px) {
+  .mg-panel {
+    border-radius: 32px;
+  }
+
+  .mg-hero {
+    flex-direction: column;
+    min-height: auto;
+    padding: 120px 0 56px;
+  }
+
+  .mg-hero-content,
+  .mg-page-hero-content {
+    max-width: none;
+  }
+
+  .mg-page-hero-stickers {
+    display: none;
+  }
+
+  .mg-hero-stickers {
+    position: static;
+    order: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 22px;
+    max-width: 560px;
+    padding: 40px 16px 0;
+  }
+
+  .mg-hero .sticker {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: calc(var(--size) * 0.6);
+  }
+
+  .sticker-label {
+    font-size: 17px;
+  }
+
+  .mg-stack {
+    padding: 110px 0 80px;
+  }
+
+  .mg-can-label {
+    margin-top: 64px;
+  }
+
+  .mg-can-list li:nth-child(n) {
+    margin-inline: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .mg-panel {
+    margin-inline: 6px;
+    border-radius: 26px;
+  }
+
+  .mg-hero-hello {
+    font-size: 20px;
+  }
+
+  .mg-hero-sub {
+    margin-top: 32px;
+  }
+
+  .mg-hero-actions .pill {
+    width: 100%;
+  }
+
+  .mg-can-row {
+    gap: 14px;
+    padding: 12px 14px;
+    border-radius: 28px;
+  }
+
+  .mg-can-sticker {
+    width: 56px;
+  }
+
+  .mg-can-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mg-can-arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mg-soon {
+    margin-left: 8px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticker-bob,
+  .mg-marquee-track {
+    animation: none;
+  }
+}

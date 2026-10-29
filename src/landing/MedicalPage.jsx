@@ -4,6 +4,7 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import PageHero from './PageHero.jsx'
 import FundCategoryGrid from './FundCategoryGrid.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
@@ -62,30 +63,21 @@ function FlowCard({ title, steps }) {
 
 export default function MedicalPage() {
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="page-hero">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container page-hero-content">
-            <Link to="/sd" className="unit-breadcrumb">
-              Student Development (SD)
-            </Link>
-            <h1 className="hero-title page-hero-title">
-              Medical Outpatient <span className="accent">Application</span>
-            </h1>
-            <p className="hero-sub">
-              Outpatient medical support reviewed by the HOD / DD approval board, where every
-              approver must sign off.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="pink"
+          back={{ to: '/sd', label: 'Student Development' }}
+          kicker="feel better, claim easier"
+          title="Medical outpatient application"
+          sub="Outpatient medical support reviewed by the HOD / DD approval board, where every approver must sign off."
+          stickers={[
+            { name: 'medicine', label: 'clinic visit', x: '12%', y: '52%', size: 104, rotate: -8 },
+            { name: 'teh-tarik', label: 'rest up', x: '88%', y: '50%', size: 84, rotate: 8 },
+          ]}
+        />
 
         <section className="module-section">
           <div className="container">
@@ -122,7 +114,7 @@ export default function MedicalPage() {
                     application — there is no partial approval.
                   </p>
                 </div>
-                <Link to="/login" className="btn btn-primary btn-lg">
+                <Link to="/login" className="pill pill-orange pill-lg">
                   Apply via Student Login
                   <Icon name="arrow-right" />
                 </Link>

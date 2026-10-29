@@ -4,6 +4,7 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import PageHero from './PageHero.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
 
@@ -47,30 +48,20 @@ function FlowCard({ title, steps }) {
 
 export default function ParkingPage() {
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="page-hero page-hero-parking">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container page-hero-content">
-            <Link to="/cl" className="unit-breadcrumb">
-              Campus Lifestyle (CL)
-            </Link>
-            <h1 className="hero-title page-hero-title">
-              Request <span className="accent">Parking Sticker</span>
-            </h1>
-            <p className="hero-sub">
-              Register your vehicle for campus parking. Approved by any CL staff member, valid for
-              one year, renewed annually.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="mint"
+          back={{ to: '/cl', label: 'Campus Lifestyle' }}
+          kicker="park without the panic"
+          title="Request a parking sticker"
+          sub="Register your vehicle for campus parking. Approved by any CL staff member, valid for one year, renewed annually."
+          stickers={[
+            { name: 'car', label: 'parking sorted', x: '12%', y: '52%', size: 150, rotate: -4 },
+          ]}
+        />
 
         <section className="module-section module-section-parking">
           <div className="container">
@@ -100,7 +91,7 @@ export default function ParkingPage() {
                   Before your sticker expires, you&apos;ll need to submit a renewal request to keep
                   parking access for the next year.
                 </p>
-                <Link to="/login" className="btn btn-primary btn-lg">
+                <Link to="/login" className="pill pill-orange pill-lg">
                   Apply via Student Login
                   <Icon name="arrow-right" />
                 </Link>

@@ -4,6 +4,7 @@ import Footer from '../landing/Footer.jsx'
 import BackToTop from '../landing/BackToTop.jsx'
 import Reveal from '../landing/Reveal.jsx'
 import Icon from '../landing/Icon.jsx'
+import PageHero from '../landing/PageHero.jsx'
 import {
   Dialog,
   DialogContent,
@@ -22,31 +23,20 @@ export default function BlogPage() {
     activeCategory === 'All' ? POSTS : POSTS.filter((post) => post.category === activeCategory)
 
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="blog-hero">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container blog-hero-content">
-            <span className="hero-badge">
-              <span className="hero-badge-dot" />
-              Student Development &amp; Campus Lifestyle Department
-            </span>
-            <h1 className="hero-title blog-hero-title">
-              Campus <span className="accent">Announcements</span> &amp; Blog
-            </h1>
-            <p className="hero-sub">
-              Official updates, deadlines, and events broadcast directly by SDCL — stay informed
-              so you never miss what matters.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="sky"
+          kicker="live from SDCL"
+          title="Campus announcements & blog"
+          sub="Official updates, deadlines, and events broadcast directly by SDCL — stay informed so you never miss what matters."
+          stickers={[
+            { name: 'laptop', label: 'stay updated', x: '12%', y: '50%', size: 130, rotate: -6 },
+            { name: 'grad-cap', label: "don't miss out", x: '88%', y: '52%', size: 130, rotate: 6 },
+          ]}
+        />
 
         <section className="blog-content">
           <div className="container">

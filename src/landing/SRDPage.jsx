@@ -4,6 +4,7 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import PageHero from './PageHero.jsx'
 import {
   Dialog,
   DialogContent,
@@ -72,32 +73,19 @@ export default function SRDPage() {
   const [selected, setSelected] = useState(null)
 
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="page-hero">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container page-hero-content">
-            <span className="hero-badge">
-              <span className="hero-badge-dot" />
-              Student Residential (SRD) &middot; Coming Soon
-            </span>
-            <h1 className="hero-title page-hero-title">
-              Explore hostel <span className="accent">blocks &amp; room details</span>
-            </h1>
-            <p className="hero-sub">
-              Browse available hostel blocks and room details below. Online booking and
-              maintenance requests (CRM) are launching soon — this page currently previews sample
-              listings.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="peach"
+          kicker="student residential · coming soon"
+          title="Explore hostel blocks & rooms"
+          sub="Browse available hostel blocks and room details below. Online booking and maintenance requests (CRM) are launching soon — this page currently previews sample listings."
+          stickers={[
+            { name: 'key', label: 'room 3B?', x: '88%', y: '50%', size: 110, rotate: 6 },
+          ]}
+        />
 
         <section className="module-section">
           <div className="container">

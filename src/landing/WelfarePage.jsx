@@ -4,6 +4,7 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import PageHero from './PageHero.jsx'
 import FundCategoryGrid from './FundCategoryGrid.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
@@ -112,30 +113,21 @@ function FlowCard({ title, steps }) {
 
 export default function WelfarePage() {
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="page-hero page-hero-welfare">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container page-hero-content">
-            <Link to="/sd" className="unit-breadcrumb">
-              Student Development (SD)
-            </Link>
-            <h1 className="hero-title page-hero-title">
-              Student Welfare <span className="accent">Application</span>
-            </h1>
-            <p className="hero-sub">
-              Financial assistance for students facing hardship, recommended by SD staff and
-              approved in-system by the Board Committee.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="lilac"
+          back={{ to: '/sd', label: 'Student Development' }}
+          kicker="for when life gets heavy"
+          title="Student welfare application"
+          sub="Financial assistance for students facing hardship, recommended by SD staff and approved in-system by the Board Committee."
+          stickers={[
+            { name: 'cash', label: 'welfare aid', x: '12%', y: '55%', size: 130, rotate: -6 },
+            { name: 'laptop', label: 'learning aid', x: '88%', y: '50%', size: 130, rotate: 7 },
+          ]}
+        />
 
         <section className="module-section module-section-welfare">
           <div className="container">
@@ -165,7 +157,7 @@ export default function WelfarePage() {
                   Category requirements are configured per category, so the exact fields and
                   documents you need to provide will be shown once you open the application form.
                 </p>
-                <Link to="/login" className="btn btn-primary btn-lg">
+                <Link to="/login" className="pill pill-orange pill-lg">
                   Apply via Student Login
                   <Icon name="arrow-right" />
                 </Link>

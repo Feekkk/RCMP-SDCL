@@ -4,6 +4,7 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import PageHero from './PageHero.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
 
@@ -47,30 +48,21 @@ function FlowCard({ title, steps }) {
 
 export default function FoodCouponPage() {
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="page-hero">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container page-hero-content">
-            <Link to="/cl" className="unit-breadcrumb">
-              Campus Lifestyle (CL)
-            </Link>
-            <h1 className="hero-title page-hero-title">
-              Claim a digital <span className="accent">Food Coupon</span>
-            </h1>
-            <p className="hero-sub">
-              Request a food coupon, get it approved once, then claim and redeem it on campus.
-              Unclaimed coupons never expire.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="butter"
+          back={{ to: '/cl', label: 'Campus Lifestyle' }}
+          kicker="makan time"
+          title="Claim a digital food coupon"
+          sub="Request a food coupon, get it approved once, then claim and redeem it on campus. Unclaimed coupons never expire."
+          stickers={[
+            { name: 'coupon', label: 'free makan', x: '12%', y: '50%', size: 140, rotate: -8 },
+            { name: 'nasi-lemak', label: 'nasi lemak!', x: '88%', y: '52%', size: 120, rotate: 8 },
+          ]}
+        />
 
         <section className="module-section">
           <div className="container">
@@ -107,7 +99,7 @@ export default function FoodCouponPage() {
                   </span>
                   <p>An unclaimed coupon does not expire — it stays available until you claim it.</p>
                 </div>
-                <Link to="/login" className="btn btn-primary btn-lg">
+                <Link to="/login" className="pill pill-orange pill-lg">
                   Apply via Student Login
                   <Icon name="arrow-right" />
                 </Link>

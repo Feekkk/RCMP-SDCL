@@ -4,6 +4,7 @@ import Footer from './Footer.jsx'
 import BackToTop from './BackToTop.jsx'
 import Reveal from './Reveal.jsx'
 import Icon from './Icon.jsx'
+import PageHero from './PageHero.jsx'
 import './LandingPage.css'
 import './UnitPage.css'
 
@@ -26,31 +27,20 @@ const SERVICES = [
 
 export default function SDPage() {
   return (
-    <div className="landing">
+    <div className="landing mg-page">
       <Header />
 
       <main id="top">
-        <section className="page-hero page-hero-welfare">
-          <div className="hero-bg" aria-hidden="true">
-            <div className="hero-dotgrid" />
-            <div className="hero-blob hero-blob-orange" />
-            <div className="hero-blob hero-blob-navy" />
-          </div>
-
-          <div className="container page-hero-content">
-            <span className="hero-badge">
-              <span className="hero-badge-dot" />
-              Student Development (SD)
-            </span>
-            <h1 className="hero-title page-hero-title">
-              Welfare &amp; Medical <span className="accent">application guides</span>
-            </h1>
-            <p className="hero-sub">
-              Learn how Student Welfare and Medical Outpatient applications are reviewed and
-              approved before you apply through your student dashboard.
-            </p>
-          </div>
-        </section>
+        <PageHero
+          tone="lilac"
+          kicker="student development"
+          title="Welfare & medical guides"
+          sub="Learn how Student Welfare and Medical Outpatient applications are reviewed and approved before you apply through your student dashboard."
+          stickers={[
+            { name: 'cash', label: 'welfare aid', x: '12%', y: '50%', size: 130, rotate: -6 },
+            { name: 'medicine', label: 'clinic visit', x: '88%', y: '50%', size: 100, rotate: 8 },
+          ]}
+        />
 
         <section className="module-section">
           <div className="container">
